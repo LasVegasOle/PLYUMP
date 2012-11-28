@@ -5,9 +5,24 @@
 // w3b: tiny.cc/lyu
 // Info:
 
-union(){
-	cube(40);
-	translate([10, 10, 30]){
-						cube(20);
-						}
-}
+altura = 10;
+radio_exterior = 32;
+radio_interior = 22;
+
+// -- Bisagra
+
+difference(){
+	// Exterior
+  	cylinder(r=radio_exterior, altura, $fn=100,center=true); 
+	// Interior
+	cylinder(r=radio_interior, altura, $fn=100,center=true); 
+	}
+
+// Boquilla
+translate([radio_exterior,0,0]) cube([altura*2 ,altura*2,altura],center=true); 
+
+
+// Útil para hacer el path del tubo
+// rotate_extrude(convexity = 10)
+// translate([50, 0, 0])
+// circle(r = 10, $fn = 100);
