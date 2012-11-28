@@ -19,7 +19,9 @@ difference(){
 	}
 
 // Boquilla
-translate([radio_exterior,0,0]) cube([altura*2 ,altura*2,altura],center=true); 
+color("red")
+translate([radio_exterior + altura/2,0,0]) 
+cube([altura*2 ,altura*2,altura],center=true); 
 
 
 // Útil para hacer el path del tubo
