@@ -1,19 +1,27 @@
-// Peristaltic extruder for 3D printing
-// File: plyump.scad
-// Author: Luis Rodriguez
-// version: 0.1
-// w3b: tiny.cc/lyu
-// Info:
+/**************************************/
+/* Peristaltic extruder for 3D printing     		  */
+/* File: plyump.scad					 		  */
+/* Author: Luis Rodriguez				 	  */
+/* version: 0.2						 		  */
+/* w3b: tiny.cc/lyu					 		  */
+/* Info:								 		  */
+/**************************************/
+// ToDo: - Redondear salida del tubo	 		  
+//		 - Modularizar partes del diseño
+//		 - Unir cuerpo y bisagra antes de tubo interior
+//		 - Independizar parámetros de largo y ancho de la boquilla
+
+
+/* ~~ PARAMETROS ~~ */
 
 altura = 10;
-radio_exterior = 32;
-radio_interior = 22;
-
-radio_exterior = 32;
-radio_interior = 22;
+radio_exterior = 40;
+radio_interior = 35;
 
 radio_bisagra = 8;
 taladro_tubo = 3.5;
+
+/* ~~ PIEZA ~~ */
 
 // -- Bisagra
 difference(){
@@ -70,3 +78,28 @@ rotate_extrude(convexity = 10)
 translate( [ radio_interior , altura/2 , 0 ] )
 circle( r =  taladro_tubo , $fn = 100);
 }
+
+// Enlace entre cuerpo y soporte de bisagra
+color("Lime")
+linear_extrude(height=altura/2)
+polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radio_exterior , 0  ] , [ -radio_exterior*0.707 , -radio_exterior*0.707 ] ] , convexity = N);
+
+/* ~~ MÓDULOS ~~ */
+
+/*
+module rueda_simple(grosor, diametro, diam_eje)
+{
+  //-- Construcción de la rueda a partir de
+  //-- los parámetros
+  difference() {
+    //-- Base de la rueda
+    cylinder(r=diametro/2, h=grosor,$fn=100);
+    //-- Taladro del eje
+    cylinder(r=diam_eje/2, h=3*grosor,$fn=20,center=true);
+  }
+} 
+
+rueda_simple(diametro=50, grosor=5, diam_eje=8);
+
+translate([50,0,0])
+  rueda_simple(diametro=40, grosor=20, diam_eje=10);*/
