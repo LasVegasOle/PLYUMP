@@ -20,11 +20,11 @@ ancho_boquilla = 10;
 largo_boquilla = 20;
 
 radio_bisagra = 8;
-diametro_tornillo = 3.2;
+diametro_tornillo = 3.4;
 
 radio_tubo = 4;
 
-suavizar_salida_tubo = 5;
+//suavizar_salida_tubo = 5;
 
 
 
