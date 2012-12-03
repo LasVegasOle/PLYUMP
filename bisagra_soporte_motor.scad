@@ -27,12 +27,15 @@ suavizar_salida_tubo = 5;
 
 nema_17_distancia_entre_tornillos = 31;
 nema_17_diagonal_entre_tornillos = 44;
-margen_tornillo_motor = 4;
+
 diametro_tornillo_guia = 5.4;
+margen_tornillo_motor = 4;
 
 altura_soporte_motor = 7;
 
-longitud_guia_tornillo_motor = 30;
+longitud_guia_tornillo_motor = 40;
+
+dimaetro_agujero_engranaje_motor = 31;
 
 /* ~~ Pieza ~~ */
 /*
@@ -41,22 +44,62 @@ longitud_guia_tornillo_motor = 30;
 		diametro_tornillo , radio_tubo , 
 		suavizar_salida_tubo );
 */
-union(){
-	color("LightGreen")
-	cube( [ nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor , 
-		longitud_guia_tornillo_motor + margen_tornillo_motor * 2, 
-		altura_soporte_motor ] ); 
+difference(){
+	color("lightBlue")
+	solido_soporte_motor();
 
-	color("Lime")
-	linear_extrude( height = altura_soporte_motor )
-	polygon( [ [ 0 , 0 ] , 
-		[ nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor , 0  ] , 
-		[ ( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor ) / 2 , - ( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor ) / 2 ] ] , 
-		convexity = n);
+	3_taladros_guias_motor();
+
+	agujero_engranaje_motor();
 }
 
+
+/*~~ Módulos ~~*/
+
+// Agujero para engranaje del motor
+module agujero_engranaje_motor(){
+	union(){
+// Parte redonda del agujero
+color("Red")
+translate([( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2 ) / 2,
+ (longitud_guia_tornillo_motor + margen_tornillo_motor * 3) / 2,
+ altura_soporte_motor / 2 ] ) {
+
+	cylinder(r = dimaetro_agujero_engranaje_motor / 2, h= altura_soporte_motor * 2, center = true);
+	
+}
+// Parte cuadrada
+color("yellow")
+translate([( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2 ) / 2, 
+	( longitud_guia_tornillo_motor + margen_tornillo_motor * 3 ) / 2 + ((longitud_guia_tornillo_motor + margen_tornillo_motor * 3) / 2)/2 , 
+	altura_soporte_motor / 2]) {
+	cube(size=[ dimaetro_agujero_engranaje_motor , 
+		(longitud_guia_tornillo_motor + margen_tornillo_motor * 3) / 2, 
+		altura_soporte_motor * 2 ], center = true);
+}
+}
+}
+
+module solido_soporte_motor(){
+	union(){
+		color("LightGreen")
+		cube( [ nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2, 
+			longitud_guia_tornillo_motor + margen_tornillo_motor * 3, 
+			altura_soporte_motor ] ); 
+
+		color("Lime")
+		linear_extrude( height = altura_soporte_motor )
+		polygon( [ [ 0 , 0 ] , 
+			[ nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2 , 0  ] , 
+			[ ( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2 ) / 2 , - ( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor ) / 2 ] ] , 
+			convexity = n);
+	}
+}
+
+module 3_taladros_guias_motor(){
+	union(){
 // Guía tornillo motor enmedio
-translate( [ nema_17_diagonal_entre_tornillos / 2 + margen_tornillo_motor, 
+translate( [ ( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2 ) / 2 , 
 	- nema_17_diagonal_entre_tornillos / 2 + margen_tornillo_motor , 
 	altura_soporte_motor / 2 ] )
 rotate(a=[ 0 , 0 , 90 ]) { 
@@ -64,7 +107,7 @@ rotate(a=[ 0 , 0 , 90 ]) {
 }
 
 // Guía tornillo motor arriba
-translate( [ margen_tornillo_motor, 
+translate( [ margen_tornillo_motor + diametro_tornillo_guia / 2 , 
 	margen_tornillo_motor , 
 	altura_soporte_motor / 2 ] )
 rotate(a=[ 0 , 0 , 90 ]) { 
@@ -72,14 +115,14 @@ rotate(a=[ 0 , 0 , 90 ]) {
 }
 
 // Guía tornillo motor abajo
-translate( [ nema_17_diagonal_entre_tornillos + margen_tornillo_motor, 
+translate( [ nema_17_diagonal_entre_tornillos + margen_tornillo_motor + diametro_tornillo_guia / 2 , 
 	margen_tornillo_motor , 
 	altura_soporte_motor / 2 ] )
 rotate(a=[ 0 , 0 , 90 ]) { 
 	taladro_tornillo_sujecion_motor();
 }
-
-/*~~ Módulos ~~*/
+}
+}
 
 module taladro_tornillo_sujecion_motor(){
 	color("pink")
