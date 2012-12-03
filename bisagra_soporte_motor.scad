@@ -32,7 +32,7 @@ diametro_tornillo_guia = 5.4;
 
 altura_soporte_motor = 7;
 
-longitud_guia_tornillo_motor = 20;
+longitud_guia_tornillo_motor = 30;
 
 /* ~~ Pieza ~~ */
 /*
@@ -44,7 +44,7 @@ longitud_guia_tornillo_motor = 20;
 union(){
 	color("LightGreen")
 	cube( [ nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor , 
-		nema_17_distancia_entre_tornillos , 
+		longitud_guia_tornillo_motor + margen_tornillo_motor * 2, 
 		altura_soporte_motor ] ); 
 
 	color("Lime")
