@@ -13,8 +13,8 @@ use <modulo_bisagra.scad>
 /* ~~ Parámetros ~~ */
 
 altura = 10;
-radio_exterior = 34;
-radio_interior = 28;
+radio_exterior = 32;
+radio_interior = 24;
 
 ancho_boquilla = 10;
 largo_boquilla = 20;
