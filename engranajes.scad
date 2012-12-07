@@ -11,6 +11,10 @@
 use <involute_gears.scad>
 
 // Rim = llanta
+// a_ ... angulo
+// r_ ... radio
+// d_ ... diametro
+// n_ ... numero
 
 /*gear (number_of_teeth = numero_de_dientes,
 	circular_pitch = distancia_entre_dientes * 180,
@@ -32,26 +36,56 @@ dientes_engranaje_motor = 15;
 dientes_engranaje_peristaltico = relacion_engranaje * dientes_engranaje_motor;
 circular_pitch = radio_engranaje_peristaltico / dientes_engranaje_peristaltico * 360;
 
-altura_engranaje = 10;
+altura_llanta_engranaje = 12;
+ancho_llanta_engranaje = 5;
+altura_interior_engranaje = 5;
 
-altura_engranaje_motor = 7;
+altura_engranaje_motor = 8;
 altura_cuello_g_motor = 8;
 radio_cuello_g_motor = 10;
 
 diametro_shaft_motor = 5.2;
 
-/* ~~ Pieza ~~ */
+n_de_cojinetes = 8;
+a_entre_cojinetes = 360 / ( n_de_cojinetes );
+d_cojinetes = 13;
+r_cojinetes = d_cojinetes / 2;
+holgura_entre_cojinetes = 0;
+d_interior_cojinetes = 4.2;
 
+r_cojinetes_con_holgura = r_cojinetes + holgura_entre_cojinetes / 2;
+r_posicion_cojinetes = ( r_cojinetes_con_holgura - sin( a_entre_cojinetes / 2 ) * r_cojinetes_con_holgura ) 
+/ sin( a_entre_cojinetes / 2 ) ;
+
+
+// Copias en circulo del taladro que hace de eje para los cojinetes
+
+/* ~~ Engranaje peristaltico ~~ */
+difference(){
 gear (circular_pitch=circular_pitch,
-	gear_thickness = altura_engranaje,
-	rim_thickness = altura_engranaje,
-	rim_width = 3,
-	hub_thickness = 6,
+	gear_thickness = altura_interior_engranaje,
+	rim_thickness = altura_llanta_engranaje,
+	rim_width = ancho_llanta_engranaje,
+	hub_thickness = 0,
 	number_of_teeth = dientes_engranaje_peristaltico
 );
+union(){
+color("Peru")
+for ( i = [ 1 : n_de_cojinetes ] ) {
+	translate( [ ( r_posicion_cojinetes + r_cojinetes ) * cos( a_entre_cojinetes * i ), 
+		( r_posicion_cojinetes + r_cojinetes )* sin( a_entre_cojinetes * i ),  
+		0])
+		cylinder( r = d_interior_cojinetes / 2 , h = 10, $fn = 20 );
+}
+cylinder( r = r_posicion_cojinetes + r_cojinetes / 3, h=10, center=true);	
+}
+}
 
 
-// Engranaje Motor
+
+
+
+/* ~~ Engranaje Motor ~~*/
 translate([radio_engranaje_peristaltico * 2, 0 , 0 ] ){
 	difference(){
 		union(){
