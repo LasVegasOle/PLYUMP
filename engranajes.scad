@@ -62,31 +62,28 @@ r_posicion_cojinetes = ( r_cojinetes_con_holgura - sin( a_entre_cojinetes / 2 ) 
 
 /* ~~ Engranaje peristaltico ~~ */
 difference(){
-gear (circular_pitch=circular_pitch,
-	gear_thickness = altura_interior_engranaje,
-	rim_thickness = altura_llanta_engranaje,
-	rim_width = ancho_llanta_engranaje,
-	hub_thickness = 0,
-	number_of_teeth = dientes_engranaje_peristaltico
-);
-union(){
-color("Peru")
-for ( i = [ 1 : n_de_cojinetes ] ) {
-	translate( [ ( r_posicion_cojinetes + r_cojinetes ) * cos( a_entre_cojinetes * i ), 
-		( r_posicion_cojinetes + r_cojinetes )* sin( a_entre_cojinetes * i ),  
-		0])
-		cylinder( r = d_interior_cojinetes / 2 , h = 10, $fn = 20 );
+	gear (circular_pitch=circular_pitch,
+		gear_thickness = altura_interior_engranaje,
+		rim_thickness = altura_llanta_engranaje,
+		rim_width = ancho_llanta_engranaje,
+		hub_thickness = 0,
+		number_of_teeth = dientes_engranaje_peristaltico
+	);
+	union(){
+		for ( i = [ 1 : n_de_cojinetes ] ) {
+			translate( [ ( r_posicion_cojinetes + r_cojinetes ) * cos( a_entre_cojinetes * i ), 
+				( r_posicion_cojinetes + r_cojinetes )* sin( a_entre_cojinetes * i ),  
+				0])
+			cylinder( r = d_interior_cojinetes / 2 , h = 10, $fn = 20 );
+		}
+		// El "3" es a ojo para no dejar los taladros de las linias de arriba muy pegadas al
+		// diametro interior ;)
+		cylinder( r = r_posicion_cojinetes + r_cojinetes / 3, h=10, center=true);	
+	}
 }
-cylinder( r = r_posicion_cojinetes + r_cojinetes / 3, h=10, center=true);	
-}
-}
-
-
-
-
 
 /* ~~ Engranaje Motor ~~*/
-translate([radio_engranaje_peristaltico * 2, 0 , 0 ] ){
+translate([radio_engranaje_peristaltico * 1.7, 0 , 0 ] ){
 	difference(){
 		union(){
 			gear (circular_pitch=circular_pitch,
@@ -95,31 +92,29 @@ translate([radio_engranaje_peristaltico * 2, 0 , 0 ] ){
 				hub_thickness = 0,
 				bore_diameter = 3,
 				number_of_teeth = dientes_engranaje_motor);
-
-	// Cuello engranaje motor
-	translate([0, 0, (altura_engranaje_motor + altura_cuello_g_motor ) /2 ]){
-		cylinder( r = radio_cuello_g_motor, h = altura_engranaje_motor + altura_cuello_g_motor, center=true);
+		// Cuello engranaje motor
+		translate([0, 0, (altura_engranaje_motor + altura_cuello_g_motor ) /2 ]){
+			cylinder( r = radio_cuello_g_motor, h = altura_engranaje_motor + altura_cuello_g_motor, center=true);
+			}
 	}
-}
-union(){
-// Eje central (shaft)
-cylinder( r = diametro_shaft_motor / 2,  
-	h = ( altura_engranaje_motor + altura_cuello_g_motor ) * 3, 
-	$fn = 20,
-	center=true);
-}
-
-// Tornillo sujeción engranaje
-translate([0, altura_cuello_g_motor , altura_engranaje_motor + altura_cuello_g_motor/2]) {
-	rotate([90, 0, 0]) {
-		cylinder( r = 3.4 / 2,  
-			h =  radio_cuello_g_motor + diametro_shaft_motor , $fn = 20,
+	union(){
+		// Eje central (shaft)
+		cylinder( r = diametro_shaft_motor / 2,  
+			h = ( altura_engranaje_motor + altura_cuello_g_motor ) * 3, 
+			$fn = 20,
 			center=true);
+		}
+		// Tornillo sujeción engranaje
+		translate([0, altura_cuello_g_motor , altura_engranaje_motor + altura_cuello_g_motor/2]) {
+			rotate([90, 0, 0]) {
+				cylinder( r = 3.4 / 2,  
+					h =  radio_cuello_g_motor + diametro_shaft_motor , $fn = 20,
+					center=true);
+			}	
+		}
+		// Agujero para tuerca del tornillo de sujeción
+		translate([0,radio_cuello_g_motor/2, altura_engranaje_motor + altura_cuello_g_motor/2 ]) {
+			cube(size=[5.2, 2.5, altura_cuello_g_motor], center=true);	
+		}
 	}
-}
-// Agujero para tuerca del tornillo de sujeción
-translate([0,radio_cuello_g_motor/2, altura_engranaje_motor + altura_cuello_g_motor/2 ]) {
-	cube(size=[5.2, 2.5, altura_cuello_g_motor], center=true);	
-}
-}
 }
