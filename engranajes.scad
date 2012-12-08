@@ -30,9 +30,9 @@ cylinder( r = radio, h = 8, center = true );
 }
 
 }*/
-relacion_engranaje = 2;
+relacion_engranaje = 1.5;
 radio_engranaje_peristaltico = 70 / 2;
-dientes_engranaje_motor = 15;
+dientes_engranaje_motor = 20;
 dientes_engranaje_peristaltico = relacion_engranaje * dientes_engranaje_motor;
 circular_pitch = radio_engranaje_peristaltico / dientes_engranaje_peristaltico * 360;
 
@@ -44,14 +44,14 @@ altura_engranaje_motor = 8;
 altura_cuello_g_motor = 8;
 radio_cuello_g_motor = 10;
 
-diametro_shaft_motor = 5.2;
+diametro_shaft_motor = 5.5;
 
 n_de_cojinetes = 8;
 a_entre_cojinetes = 360 / ( n_de_cojinetes );
 d_cojinetes = 13;
 r_cojinetes = d_cojinetes / 2;
 holgura_entre_cojinetes = 0;
-d_interior_cojinetes = 4.2;
+d_interior_cojinetes = 4.5;
 
 r_cojinetes_con_holgura = r_cojinetes + holgura_entre_cojinetes / 2;
 r_posicion_cojinetes = ( r_cojinetes_con_holgura - sin( a_entre_cojinetes / 2 ) * r_cojinetes_con_holgura ) 
@@ -83,7 +83,7 @@ difference(){
 }
 
 /* ~~ Engranaje Motor ~~*/
-translate([radio_engranaje_peristaltico * 1.7, 0 , 0 ] ){
+translate([radio_engranaje_peristaltico * 1.9, 0 , 0 ] ){
 	difference(){
 		union(){
 			gear (circular_pitch=circular_pitch,
