@@ -34,7 +34,7 @@ diametro_tornillo_guia_central = 6.4;
 
 margen_tornillo_motor = 4;
 
-altura_soporte_motor = 7;
+altura_soporte_motor = 5;
 
 longitud_guia_tornillo_motor = 50;
 

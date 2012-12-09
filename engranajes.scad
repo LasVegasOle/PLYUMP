@@ -30,9 +30,9 @@ cylinder( r = radio, h = 8, center = true );
 }
 
 }*/
-relacion_engranaje = 1.5;
+relacion_engranaje = 2;
 radio_engranaje_peristaltico = 70 / 2;
-dientes_engranaje_motor = 20;
+dientes_engranaje_motor = 13;
 dientes_engranaje_peristaltico = relacion_engranaje * dientes_engranaje_motor;
 circular_pitch = radio_engranaje_peristaltico / dientes_engranaje_peristaltico * 360;
 
@@ -41,7 +41,7 @@ ancho_llanta_engranaje = 5;
 altura_interior_engranaje = 5;
 
 altura_engranaje_motor = 8;
-altura_cuello_g_motor = 8;
+altura_cuello_g_motor = 6;
 radio_cuello_g_motor = 10;
 
 diametro_shaft_motor = 5.5;
@@ -50,8 +50,11 @@ n_de_cojinetes = 8;
 a_entre_cojinetes = 360 / ( n_de_cojinetes );
 d_cojinetes = 13;
 r_cojinetes = d_cojinetes / 2;
-holgura_entre_cojinetes = 0;
-d_interior_cojinetes = 4.5;
+holgura_entre_cojinetes = 1;
+d_interior_cojinetes = 5;
+
+ancho_tuerca_3mm = 3;
+largo_tuerca_3mm = 5.8;
 
 r_cojinetes_con_holgura = r_cojinetes + holgura_entre_cojinetes / 2;
 r_posicion_cojinetes = ( r_cojinetes_con_holgura - sin( a_entre_cojinetes / 2 ) * r_cojinetes_con_holgura ) 
@@ -105,7 +108,7 @@ translate([radio_engranaje_peristaltico * 1.9, 0 , 0 ] ){
 			center=true);
 		}
 		// Tornillo sujeción engranaje
-		translate([0, altura_cuello_g_motor , altura_engranaje_motor + altura_cuello_g_motor/2]) {
+		translate([0, altura_cuello_g_motor , altura_engranaje_motor + altura_cuello_g_motor / 2 ] ) {
 			rotate([90, 0, 0]) {
 				cylinder( r = 3.4 / 2,  
 					h =  radio_cuello_g_motor + diametro_shaft_motor , $fn = 20,
@@ -113,8 +116,8 @@ translate([radio_engranaje_peristaltico * 1.9, 0 , 0 ] ){
 			}	
 		}
 		// Agujero para tuerca del tornillo de sujeción
-		translate([0,radio_cuello_g_motor/2, altura_engranaje_motor + altura_cuello_g_motor/2 ]) {
-			cube(size=[5.2, 2.5, altura_cuello_g_motor], center=true);	
+		translate([0,radio_cuello_g_motor / (1.65) , altura_engranaje_motor + altura_cuello_g_motor/2 ]) {
+			cube(size=[largo_tuerca_3mm, ancho_tuerca_3mm, altura_cuello_g_motor], center=true);	
 		}
 	}
 }

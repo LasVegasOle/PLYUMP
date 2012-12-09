@@ -9,10 +9,12 @@
 // @todo: - 
 
 // Soporte lateral de cierre para el extrusor
-module bisagra_extrusor( altura = 10, radio_exterior = 32 , radio_interior = 24 ,
+bisagra_extrusor();
+
+module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 ,
     ancho_boquilla = 10, largo_boquilla = 20, radio_bisagra = 8,
-    diametro_tornillo = 3, radio_tubo = 4 , 
-    suavizar_salida_tubo = 5 )
+    diametro_tornillo = 3, radio_tubo = 3 , 
+    suavizar_salida_tubo = 7 )
 {
     difference(){
         union(){
@@ -75,10 +77,22 @@ module bisagra_extrusor( altura = 10, radio_exterior = 32 , radio_interior = 24 
     rotate_extrude(convexity = 10)
     translate( [ radio_interior , altura/2 , 0 ] )
     circle( r =  radio_tubo , $fn = 100 );
-/*    // toroide para suavizar la salida del tubo de la bomba
-    translate( [ radio_interior , 0 , altura/2 ] ) 
-    rotate_extrude(convexity = 10)
-    translate( [ suavizar_salida_tubo , 0 , 0 ] ) 
-    circle( r =  radio_tubo , $fn = 100);*/
+    translate([ radio_interior + suavizar_salida_tubo + radio_tubo / 1.5, 
+        - ( suavizar_salida_tubo + radio_tubo ), 
+        altura / 2]) {
+        intersection(){
+           // toroide para suavizar la salida del tubo de la bomba
+            //translate( [ 24+3 , -3 , 10/2 ] ) 
+            rotate_extrude(convexity = 10)
+            translate([ suavizar_salida_tubo + radio_tubo, 0, 0])
+                circle( r =  radio_tubo , $fn = 100);
+                
+            translate([-(suavizar_salida_tubo + radio_tubo * 2 ) / 2, 
+                (suavizar_salida_tubo + suavizar_salida_tubo * 2 ) / 2 , 0])
+                cube(size=[ suavizar_salida_tubo + radio_tubo * 2, 
+                    suavizar_salida_tubo + radio_tubo * 2, altura], center=true); 
+        }
+    }
+
 }
 }
