@@ -13,7 +13,7 @@ use <modulo_bisagra.scad>
 /* ~~ Parámetros ~~ */
 
 altura = 10;
-radio_exterior = 35;
+radio_exterior = 36;
 radio_interior = 24;
 
 ancho_boquilla = 10;
@@ -24,10 +24,10 @@ diametro_tornillo = 3.4;
 
 radio_tubo = 3;
 
-//suavizar_salida_tubo = 5;
+//suavizar_salida_tubo = 10;
 grosor_pared_pinza = 2;
 altura_pinza = 6;
-holgura_pinza = 0.2;
+holgura_pinza = 0.3;
 
 
 /* ~~ Pieza ~~ */
@@ -35,8 +35,7 @@ holgura_pinza = 0.2;
 difference(){
 	bisagra_extrusor( altura , radio_exterior , radio_interior ,
 		ancho_boquilla, largo_boquilla , radio_bisagra ,
-		diametro_tornillo , radio_tubo , 
-		suavizar_salida_tubo );
+		diametro_tornillo , radio_tubo );
 
 // Taladro entrada del tubo
 color("LightSlateGray")

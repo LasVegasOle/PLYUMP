@@ -12,7 +12,7 @@ use <modulo_bisagra.scad>
 
 /* ~~ Parámetros ~~ */
 altura = 10;
-radio_exterior = 32;
+radio_exterior = 36;
 radio_interior = 24;
 
 ancho_boquilla = 10;
@@ -21,9 +21,7 @@ largo_boquilla = 20;
 radio_bisagra = 8;
 diametro_tornillo = 3.4;
 
-radio_tubo = 4;
-
-suavizar_salida_tubo = 5;
+radio_tubo = 3;
 
 nema_17_distancia_entre_tornillos = 31;
 nema_17_diagonal_entre_tornillos = 44;
@@ -36,7 +34,7 @@ margen_tornillo_motor = 4;
 
 altura_soporte_motor = 5;
 
-longitud_guia_tornillo_motor = 50;
+longitud_guia_tornillo_motor = 40;
 
 dimaetro_agujero_engranaje_motor = 31;
 
@@ -46,8 +44,7 @@ dimaetro_agujero_engranaje_motor = 31;
 union(){
 	bisagra_extrusor( altura , radio_exterior , radio_interior ,
 		ancho_boquilla, largo_boquilla , radio_bisagra ,
-		diametro_tornillo , radio_tubo , 
-		suavizar_salida_tubo );
+		diametro_tornillo , radio_tubo );
 	// El ángulo de 26 esta hecho a ojímetro ajustando la piezas hasta que "encaja"
 	// Taladramos un cilindro al soporte del motor para que no sobresalga en el interior de la bisagra
 	difference(){
@@ -81,7 +78,9 @@ module agujero_engranaje_motor(){
 // Parte redonda del agujero
 color("Red")
 translate([( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2 ) / 2,
-	(longitud_guia_tornillo_motor + margen_tornillo_motor * 3) / 2,
+
+	(longitud_guia_tornillo_motor + margen_tornillo_motor * 3) / 4,
+
 	altura_soporte_motor / 2 ] ) {
 
 	cylinder(r = dimaetro_agujero_engranaje_motor / 2, h= altura_soporte_motor * 2, center = true);
@@ -90,7 +89,9 @@ translate([( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_
 // Parte cuadrada
 color("yellow")
 translate([( nema_17_diagonal_entre_tornillos + diametro_tornillo_guia + margen_tornillo_motor * 2 ) / 2, 
-	( longitud_guia_tornillo_motor + margen_tornillo_motor * 3 ) / 2 + ((longitud_guia_tornillo_motor + margen_tornillo_motor * 3) / 2)/2 , 
+
+	( longitud_guia_tornillo_motor + margen_tornillo_motor * 3 ) / 2  , 
+
 	altura_soporte_motor / 2]) {
 	cube(size=[ dimaetro_agujero_engranaje_motor , 
 		(longitud_guia_tornillo_motor + margen_tornillo_motor * 3) / 2, 
