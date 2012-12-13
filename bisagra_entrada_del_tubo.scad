@@ -16,9 +16,9 @@ altura = 10;
 radio_exterior = 36;
 radio_interior = 24;
 
-radio_tubo = 3.5;
+radio_tubo = 3.5  ;
 
-radio_entrada_tubo = 4;
+radio_entrada_tubo = 3.5;
 
 ancho_boquilla = 10;
 largo_boquilla = 20;
@@ -27,6 +27,8 @@ radio_bisagra = 8;
 diametro_tornillo = 3.4;
 
 suavizar_salida_tubo = 10;
+
+a_tubo_entrada = 20;
 
 // Pinza
 grosor_pared_pinza = 2;
@@ -40,8 +42,8 @@ bisagra_entrada_del_tubo( altura = altura, radio_exterior = radio_exterior , rad
   diametro_tornillo = diametro_tornillo, radio_tubo = radio_tubo , 
   suavizar_salida_tubo = suavizar_salida_tubo, radio_entrada_tubo = radio_entrada_tubo );
 
-pinza_bisagras( grosor_pared_pinza = grosor_pared_pinza, altura_pinza = altura_pinza, holgura_pinza = holgura_pinza,
-  ancho_boquilla = ancho_boquilla, largo_boquilla = largo_boquilla );
+//pinza_bisagras( grosor_pared_pinza = grosor_pared_pinza, altura_pinza = altura_pinza, holgura_pinza = holgura_pinza,
+//  ancho_boquilla = ancho_boquilla, largo_boquilla = largo_boquilla );
 
 /* ~~ Módulos ~~ */
 
@@ -56,8 +58,8 @@ module bisagra_entrada_del_tubo( altura = 10, radio_exterior = 36 , radio_interi
     diametro_tornillo , radio_tubo );
     // Taladro entrada del tubo
     color("LightSlateGray")
-    translate( [ radio_exterior * 0.707 , - radio_exterior * 0.707 , altura / 2 ] )
-    rotate( a = [ 0 , 90 , - 45 ] ) { 
+    translate( [ radio_exterior * cos ( a_tubo_entrada ), - radio_exterior * sin ( a_tubo_entrada ) , altura / 2 ] )
+    rotate( a = [ 0 , 90 , - a_tubo_entrada ] ) { 
       cylinder( r = radio_entrada_tubo , largo_boquilla * 2 , $fn = 100, center = true );
     }
   }
