@@ -21,20 +21,20 @@ largo_boquilla = 20;
 radio_bisagra = 8;
 diametro_tornillo = 3.4;
 
-radio_tubo = 3;
+radio_tubo = 3.5;
 
 nema_17_distancia_entre_tornillos = 31;
 nema_17_diagonal_entre_tornillos = 44;
 
-diametro_tornillo_guia = 5.4;
+diametro_tornillo_guia = 4.4;
 // Lo diferencio para permitir que el eje ("shaft") del motor se desplace a través de la guía central abierta
-diametro_tornillo_guia_central = 6.4;
+diametro_tornillo_guia_central = 4.4;
 
 margen_tornillo_motor = 4;
 
 altura_soporte_motor = 5;
 
-longitud_guia_tornillo_motor = 40;
+longitud_guia_tornillo_motor = 35;
 
 dimaetro_agujero_engranaje_motor = 31;
 

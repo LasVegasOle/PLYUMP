@@ -6,20 +6,19 @@
 /* w3b: tiny.cc/lyu     					 		  */
 /* info:				    				 		  */
 /******************************************************/
-// @todo: - redondear salida del tubo	 		  
-//		  - modularizar partes del diseño
-//		  - independizar parámetros de largo y ancho de la boquilla
-
-use <bisagra_entrada_del_tubo.scad>
-use <bisagra_soporte_motor.scad>
 
 /* ~~ Parámetros ~~ */
 
+altura = 10;
+radio_exterior = 36;
+radio_interior = 24;
 
+ancho_boquilla = 10;
+largo_boquilla = 20;
 
-/* ~~ Pieza ~~ */
-color("indigo")
-    bisagra_entrada_del_tubo();
+radio_bisagra = 8;
+diametro_tornillo = 3.4;
 
-color("Peru")
-    pinza_bisagras();
+radio_tubo = 3;
+
+suavizar_salida_tubo = 10;
