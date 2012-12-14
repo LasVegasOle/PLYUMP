@@ -35,15 +35,20 @@ grosor_pared_pinza = 2;
 altura_pinza = 6;
 holgura_pinza = 0.3;
 
+grosor_pared_exterior_tubo_boquilla = 1;
+
 /* Pieza */
 
-bisagra_entrada_del_tubo( altura = altura, radio_exterior = radio_exterior , radio_interior = radio_interior ,
+/*bisagra_entrada_del_tubo( altura = altura, radio_exterior = radio_exterior , radio_interior = radio_interior ,
   ancho_boquilla = ancho_boquilla, largo_boquilla = largo_boquilla, radio_bisagra = radio_bisagra,
   diametro_tornillo = diametro_tornillo, radio_tubo = radio_tubo , 
-  suavizar_salida_tubo = suavizar_salida_tubo, radio_entrada_tubo = radio_entrada_tubo );
+  suavizar_salida_tubo = suavizar_salida_tubo, radio_entrada_tubo = radio_entrada_tubo );*/
 
 //pinza_bisagras( grosor_pared_pinza = grosor_pared_pinza, altura_pinza = altura_pinza, holgura_pinza = holgura_pinza,
 //  ancho_boquilla = ancho_boquilla, largo_boquilla = largo_boquilla );
+bisagra_extrusor();
+
+pinza_doble_bisagras(ancho_boquilla = ancho_boquilla, grosor_pared_exterior_tubo_boquilla = grosor_pared_exterior_tubo_boquilla);
 
 /* ~~ Módulos ~~ */
 
@@ -79,9 +84,37 @@ module pinza_bisagras( grosor_pared_pinza = 2, altura_pinza = 6, holgura_pinza =
       altura_pinza  ]);  }
   // Agujero tubo out
   translate([ (altura + ( holgura_pinza + grosor_pared_pinza ) * 2 ) / 2,
-    ancho_boquilla + holgura_pinza + grosor_pared_pinza,
-    0]){
-    cylinder( r = radio_entrada_tubo , largo_boquilla , $fn = 100, center = true );
+      ancho_boquilla + holgura_pinza + grosor_pared_pinza,
+      0]){
+      cylinder( r = radio_entrada_tubo , largo_boquilla , $fn = 100, center = true );
+    }
   }
 }
+
+// Pinza con agujero de entrada y salida entre bisagras
+module pinza_doble_bisagras( grosor_pared_pinza = 2, altura_pinza = 6, holgura_pinza = 0.3,
+  ancho_boquilla = 10, largo_boquilla = 20, grosor_pared_exterior_tubo_boquilla = 1 ){
+  difference(){
+    // Exterior
+    cube( [ altura + ( holgura_pinza + grosor_pared_pinza ) * 2 ,
+      ( ancho_boquilla + holgura_pinza + grosor_pared_pinza ) * 2, 
+      altura_pinza + grosor_pared_pinza ]);
+  // Interior
+  translate([ grosor_pared_pinza , grosor_pared_pinza, grosor_pared_pinza]){
+    cube( [ altura + holgura_pinza * 2 ,
+      ( ancho_boquilla + holgura_pinza ) * 2, 
+      altura_pinza  ]);  }
+  // Agujero tubo out
+  translate([ (altura + ( holgura_pinza + grosor_pared_pinza ) * 2 ) / 2,
+      ( ancho_boquilla + grosor_pared_pinza ) - ( radio_tubo + grosor_pared_exterior_tubo_boquilla ),
+      0]){
+      cylinder( r = radio_entrada_tubo , largo_boquilla , $fn = 100, center = true );
+    }
+  // Agujero tubo in
+  translate([ (altura + ( holgura_pinza + grosor_pared_pinza ) * 2 ) / 2,
+      ( ancho_boquilla + grosor_pared_pinza ) + ( radio_tubo + grosor_pared_exterior_tubo_boquilla ),
+      0]){
+      cylinder( r = radio_entrada_tubo , largo_boquilla , $fn = 100, center = true );
+    }
+  }
 }

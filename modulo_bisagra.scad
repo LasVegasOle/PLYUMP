@@ -11,12 +11,32 @@
 // Soporte lateral de cierre para el extrusor
 //bisagra_extrusor();
 
-bisagra_extrusor();
+altura = 10;
+radio_exterior = 36;
+radio_interior = 24;
+
+radio_tubo = 3.5  ;
+
+radio_entrada_tubo = 3.5;
+
+ancho_boquilla = 10;
+largo_boquilla = 20;
+
+radio_bisagra = 8;
+diametro_tornillo = 3.4;
+
+suavizar_salida_tubo = 10;
+grosor_pared_exterior_tubo_boquilla = 1;
+
+bisagra_extrusor( altura = altura, radio_exterior = radio_exterior , radio_interior = radio_interior ,
+    ancho_boquilla = ancho_boquilla, largo_boquilla = largo_boquilla, radio_bisagra = radio_bisagra,
+    diametro_tornillo = diametro_tornillo, radio_tubo = radio_tubo , 
+    suavizar_salida_tubo = suavizar_salida_tubo, grosor_pared_exterior_tubo_boquilla = grosor_pared_exterior_tubo_boquilla );
 
 module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 ,
     ancho_boquilla = 10, largo_boquilla = 20, radio_bisagra = 8,
     diametro_tornillo = 3, radio_tubo = 3 , 
-    suavizar_salida_tubo = 10 )
+    suavizar_salida_tubo = 10, grosor_pared_exterior_tubo_boquilla = 1 )
 {
     difference(){
         union(){
@@ -39,7 +59,7 @@ module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 
                 }
                 // taladro boquilla
                 color("blue")
-                translate( [ radio_exterior + largo_boquilla / 2 , 0 , altura/2 ] )
+                translate( [ radio_exterior + largo_boquilla / 2 , - (radio_tubo + grosor_pared_exterior_tubo_boquilla) , altura/2 ] )
                 rotate(a=[0,90,0]) { 
                     cylinder( r = radio_tubo , largo_boquilla * 2 , $fn = 100, center = true );
                 }
@@ -79,6 +99,7 @@ module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 
     rotate_extrude(convexity = 10)
     translate( [ radio_interior , altura/2 , 0 ] )
     circle( r =  radio_tubo , $fn = 100 );
+/*    // Suavizado salida del tubo
     translate([ radio_interior + suavizar_salida_tubo, 
         - ( suavizar_salida_tubo + radio_tubo ), 
         altura / 2]) {
@@ -99,7 +120,6 @@ module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 
                 cube(size = [ suavizar_salida_tubo + radio_tubo * 2, 
                     suavizar_salida_tubo + radio_tubo * 2, altura ] , center = true ); 
         }
-    }
-
+    }*/
 }
 }
