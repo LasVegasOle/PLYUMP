@@ -21,7 +21,7 @@ radio_tubo = 3.5  ;
 radio_entrada_tubo = 3.5;
 
 ancho_boquilla = 10;
-largo_boquilla = 20;
+largo_boquilla = 30;
 
 radio_bisagra = 8;
 diametro_tornillo = 3.4;
@@ -46,9 +46,11 @@ grosor_pared_exterior_tubo_boquilla = 1;
 
 //pinza_bisagras( grosor_pared_pinza = grosor_pared_pinza, altura_pinza = altura_pinza, holgura_pinza = holgura_pinza,
 //  ancho_boquilla = ancho_boquilla, largo_boquilla = largo_boquilla );
-bisagra_extrusor();
+//bisagra_extrusor();
 
-pinza_doble_bisagras(ancho_boquilla = ancho_boquilla, grosor_pared_exterior_tubo_boquilla = grosor_pared_exterior_tubo_boquilla);
+//pinza_doble_bisagras(ancho_boquilla = ancho_boquilla, grosor_pared_exterior_tubo_boquilla = grosor_pared_exterior_tubo_boquilla);
+
+pinza_cuadrada_bisagras();
 
 /* ~~ Módulos ~~ */
 
@@ -115,6 +117,28 @@ module pinza_doble_bisagras( grosor_pared_pinza = 2, altura_pinza = 6, holgura_p
       ( ancho_boquilla + grosor_pared_pinza ) + ( radio_tubo + grosor_pared_exterior_tubo_boquilla ),
       0]){
       cylinder( r = radio_entrada_tubo , largo_boquilla , $fn = 100, center = true );
+    }
+  }
+}
+
+// Pinza entre bisagras
+module pinza_cuadrada_bisagras( grosor_pared_pinza = 2, altura_pinza = 10, holgura_pinza = 0.3,
+  ancho_boquilla = 10, largo_boquilla = 30 ){
+  difference(){
+    // Exterior
+    cube( [ altura + ( holgura_pinza + grosor_pared_pinza ) * 2 ,
+      ( ancho_boquilla + holgura_pinza + grosor_pared_pinza ) * 2, 
+      altura_pinza + grosor_pared_pinza ]);
+  // Interior
+  translate([ grosor_pared_pinza , grosor_pared_pinza, grosor_pared_pinza]){
+    cube( [ altura + holgura_pinza * 2 ,
+      ( ancho_boquilla + holgura_pinza ) * 2, 
+      altura_pinza  ]);  }
+  // Agujero tubo out
+  translate([ (altura + ( holgura_pinza + grosor_pared_pinza ) * 2 ) / 2,
+      ancho_boquilla + holgura_pinza + grosor_pared_pinza,
+      0]){
+      cube(size=[radio_entrada_tubo * 2, radio_entrada_tubo * 4, radio_entrada_tubo * 8 ], center=true);
     }
   }
 }
