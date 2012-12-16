@@ -11,11 +11,11 @@
 // Soporte lateral de cierre para el extrusor
 //bisagra_extrusor();
 
-altura = 10;
+altura = 11;
 radio_exterior = 36;
 radio_interior = 24;
 
-radio_tubo = 2.25  ;
+radio_tubo = 2.25;
 
 radio_entrada_tubo = 2.25;
 
@@ -28,21 +28,22 @@ diametro_tornillo = 3.4;
 suavizar_salida_tubo = 10;
 grosor_pared_exterior_tubo_boquilla = 1;
 
+g_tope_cojinetes = 1;
+
 
 /*~~ Pieza ~~*/
 mirror([0, 1, 0]) {
     
-
 media_bisagra_sin_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
     largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
-    altura = altura / 2 , radio_tubo = radio_tubo );
+    altura = altura / 2 , radio_tubo = radio_tubo, g_tope_cojinetes = g_tope_cojinetes );
 }
 /*bisagra_extrusor( altura = altura, radio_exterior = radio_exterior , radio_interior = radio_interior ,
     ancho_boquilla = ancho_boquilla, largo_boquilla = largo_boquilla, radio_bisagra = radio_bisagra,
     diametro_tornillo = diametro_tornillo, radio_tubo = radio_tubo , 
     suavizar_salida_tubo = suavizar_salida_tubo, grosor_pared_exterior_tubo_boquilla = grosor_pared_exterior_tubo_boquilla );*/
 
-/*~~ Módulos ~~*/
+/*~~ MÃ³dulos ~~*/
 
 module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 ,
     ancho_boquilla = 10, largo_boquilla = 20, radio_bisagra = 8,
@@ -106,7 +107,7 @@ module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 
             [ -radio_exterior * 0.707 , -radio_exterior * 0.707 ] ] , convexity = n);
     }
     
-    // Agujerear el camino del tubo através del cuerpo
+    // Agujerear el camino del tubo atravÃ©s del cuerpo
     rotate_extrude(convexity = 10)
     translate( [ radio_interior , altura/2 , 0 ] )
     circle( r =  radio_tubo , $fn = 100 );
@@ -136,9 +137,9 @@ module bisagra_extrusor( altura = 10, radio_exterior = 35 , radio_interior = 24 
 }
 
 
-/* Módulos para probar bomba con paredes cuadradas */
+/* MÃ³dulos para probar bomba con paredes cuadradas */
 module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_boquilla = 20,
-    ancho_boquilla = 10, altura = 10, radio_tubo = 3.5,
+    ancho_boquilla = 10, altura = 10, radio_tubo = 3.5, g_tope_cojinetes = 1
 ){
     difference(){
         difference(){
@@ -149,10 +150,7 @@ module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_bo
                         cylinder( r = radio_exterior, altura, $fn = 100 ); 
                         // interior
                         cylinder(r = radio_interior, altura, $fn = 100 ); 
-                        // radio tubo
-
                     }
-                    
                     // boquilla
                     color("red")
                     translate( [ radio_exterior + largo_boquilla / 2 - ( radio_exterior - radio_interior ), 0 , altura / 2 ] ) 
@@ -166,7 +164,7 @@ module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_bo
                     cube(size=[largo_boquilla * 2, radio_tubo * 2, altura * 2], center=true);
                 }
                 // Taladro camino interior del tubo
-                translate([0, 0, altura - radio_tubo]) {
+                translate([0, 0, g_tope_cojinetes ]) {
                     cylinder(r = radio_interior + radio_tubo, altura, $fn = 100 ); 
                 }
             }
