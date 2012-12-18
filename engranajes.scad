@@ -37,7 +37,7 @@ dientes_engranaje_peristaltico = relacion_engranaje * dientes_engranaje_motor;
 circular_pitch = radio_engranaje_peristaltico / dientes_engranaje_peristaltico * 360;
 
 altura_llanta_engranaje = 12;
-ancho_llanta_engranaje = 5;
+ancho_llanta_engranaje = 4;
 altura_interior_engranaje = 5;
 
 altura_engranaje_motor = 8;
@@ -46,11 +46,14 @@ radio_cuello_g_motor = 10;
 
 diametro_shaft_motor = 5.5;
 
-n_de_cojinetes = 8;
+// #cojinetes, holgura para 17.79 de radio. 8, 1; 7, 4.308; 6, 9.583; 5, 19.202
+
+n_de_cojinetes = 5;
+holgura_entre_cojinetes = 19.202;
+
 a_entre_cojinetes = 360 / ( n_de_cojinetes );
 d_cojinetes = 13;
 r_cojinetes = d_cojinetes / 2;
-holgura_entre_cojinetes = 1;
 d_interior_cojinetes = 5;
 
 ancho_tuerca_3mm = 3;
@@ -59,7 +62,7 @@ largo_tuerca_3mm = 5.8;
 r_cojinetes_con_holgura = r_cojinetes + holgura_entre_cojinetes / 2;
 r_posicion_cojinetes = ( r_cojinetes_con_holgura - sin( a_entre_cojinetes / 2 ) * r_cojinetes_con_holgura ) 
 / sin( a_entre_cojinetes / 2 ) ;
-
+echo(str("Radio cojinete = ", r_posicion_cojinetes + r_cojinetes ) );
 
 // Copias en circulo del taladro que hace de eje para los cojinetes
 
@@ -70,7 +73,8 @@ difference(){
 		rim_thickness = altura_llanta_engranaje,
 		rim_width = ancho_llanta_engranaje,
 		hub_thickness = 0,
-		number_of_teeth = dientes_engranaje_peristaltico
+		number_of_teeth = dientes_engranaje_peristaltico,
+		twist = 0
 	);
 	union(){
 		for ( i = [ 1 : n_de_cojinetes ] ) {
