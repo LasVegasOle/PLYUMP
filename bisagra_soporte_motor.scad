@@ -16,12 +16,12 @@ radio_exterior = 36;
 radio_interior = 24;
 
 ancho_boquilla = 10;
-largo_boquilla = 20;
+largo_boquilla = 30;
 
 radio_bisagra = 8;
 diametro_tornillo = 3.4;
 
-radio_tubo = 3.5;
+radio_tubo = 2;
 
 nema_17_distancia_entre_tornillos = 31;
 nema_17_diagonal_entre_tornillos = 44;
@@ -40,11 +40,20 @@ dimaetro_agujero_engranaje_motor = 31;
 
 /* ~~ Pieza ~~ */
 
-//color("Plum")
+color("Plum")
+// Parte A
+mirror([0, 1, 0]) {
+    media_bisagra_sin_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
+        largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
+        altura = altura / 2 , radio_tubo = radio_tubo );
+}
+
+// Parte B
+translate([0, - radio_interior/4, 0]) 
 union(){
-	bisagra_extrusor( altura , radio_exterior , radio_interior ,
-		ancho_boquilla, largo_boquilla , radio_bisagra ,
-		diametro_tornillo , radio_tubo );
+	    media_bisagra_con_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
+        largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
+        altura = altura / 2 , radio_tubo = radio_tubo);
 	// El ángulo de 26 esta hecho a ojímetro ajustando la piezas hasta que "encaja"
 	// Taladramos un cilindro al soporte del motor para que no sobresalga en el interior de la bisagra
 	difference(){

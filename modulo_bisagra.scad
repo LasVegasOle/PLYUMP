@@ -194,8 +194,8 @@ module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_bo
                     }
                     // Cuadrado que representa la parte que queremos quedarnos del toroide para encajarla en la salida del tubo    
                     translate([-( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2, 
-                            ( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2 , 0])
-                        cube(size = [ suavizar_salida_tubo + radio_tubo_real * 4, 
+                        ( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2 , 0])
+                    cube(size = [ suavizar_salida_tubo + radio_tubo_real * 4, 
                         suavizar_salida_tubo + radio_tubo_real * 1, altura * 2 ] , center = true ); 
                 }
             }
@@ -204,15 +204,15 @@ module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_bo
             translate( [ - radio_exterior , 0 , 0 ] ) 
             cube( [ ( radio_exterior + altura + largo_boquilla ) * 2, radio_exterior , altura ] ); 
         }
-}
+    }
 
 
-module media_bisagra_con_eje( radio_interior = 24, radio_exterior = 36, largo_boquilla = 20,
-    ancho_boquilla = 10, altura = 10, radio_tubo = 3.5, g_tope_cojinetes = 1, radio_tubo_real = 3.5, bisel_cojinete = 1
-){
-    difference(){
+    module media_bisagra_con_eje( radio_interior = 24, radio_exterior = 36, largo_boquilla = 20,
+        ancho_boquilla = 10, altura = 10, radio_tubo = 3.5, g_tope_cojinetes = 1, radio_tubo_real = 3.5, bisel_cojinete = 1
+    ){
         difference(){
-            union(){
+            difference(){
+                union(){
                     // Semi ciculo central
                     difference(){
                         // exterior
@@ -224,8 +224,8 @@ module media_bisagra_con_eje( radio_interior = 24, radio_exterior = 36, largo_bo
                     color("red")
                     translate( [ radio_exterior + largo_boquilla / 2 - ( radio_exterior - radio_interior ), 0 , altura / 2 ] ) 
                     cube( [ largo_boquilla , ancho_boquilla * 2 , altura ] , center=true ); 
-                
-difference(){
+
+                    difference(){
                     // Cilindro de apoyo entre piezas para el giro ( cuerpo de la bisagra)
                     color("green")
                     translate( [ - ( radio_exterior + radio_bisagra ) , 0 , 0 ] )
@@ -236,18 +236,12 @@ difference(){
                     translate( [ - ( radio_exterior + radio_bisagra ) , 0 , altura/4 ] )
                     cylinder(r = diametro_tornillo/2, altura * 2, $fn = 100, center = true);                  
                 }
-
 // Enlace entre cuerpo y soporte de bisagra
 color("lime")
 linear_extrude(height =altura)
 polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radio_exterior , 0  ] , 
     [ -radio_exterior * 0.707 , -radio_exterior * 0.707 ] ] , convexity = n);
-
-
-
-                }
-
-
+}
                     // taladro boquilla
                     color("blue")
                     translate( [ radio_exterior + largo_boquilla / 2 , - radio_tubo , altura * 2 + g_tope_cojinetes  ] )
@@ -274,8 +268,8 @@ polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radi
                     }
                     // Cuadrado que representa la parte que queremos quedarnos del toroide para encajarla en la salida del tubo    
                     translate([-( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2, 
-                            ( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2 , 0])
-                        cube(size = [ suavizar_salida_tubo + radio_tubo_real * 4, 
+                        ( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2 , 0])
+                    cube(size = [ suavizar_salida_tubo + radio_tubo_real * 4, 
                         suavizar_salida_tubo + radio_tubo_real * 1, altura * 2 ] , center = true ); 
                 }
             }
@@ -284,4 +278,4 @@ polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radi
             translate( [ - radio_exterior , 0 , 0 ] ) 
             cube( [ ( radio_exterior + altura + largo_boquilla ) * 2, radio_exterior , altura ] ); 
         }
-}
+    }

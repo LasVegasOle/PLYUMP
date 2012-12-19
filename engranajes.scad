@@ -67,6 +67,15 @@ echo(str("Radio cojinete = ", r_posicion_cojinetes + r_cojinetes ) );
 // Copias en circulo del taladro que hace de eje para los cojinetes
 
 /* ~~ Engranaje peristaltico ~~ */
+
+mirror([0, 1, 0]) {
+    media_bisagra_sin_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
+        largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
+        altura = altura / 2 , radio_tubo = radio_tubo, g_tope_cojinetes = g_tope_cojinetes,
+        radio_tubo_real = radio_tubo_real, bisel_cojinete = bisel_cojinete );
+}
+
+
 difference(){
 	gear (circular_pitch=circular_pitch,
 		gear_thickness = altura_interior_engranaje,
@@ -89,7 +98,7 @@ difference(){
 	}
 }
 
-/* ~~ Engranaje Motor ~~*/
+/* ~~ Engranaje Motor ~~*/ /*
 translate([radio_engranaje_peristaltico * 1.9, 0 , 0 ] ){
 	difference(){
 		union(){
