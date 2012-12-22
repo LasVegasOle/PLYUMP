@@ -16,7 +16,7 @@ radio_exterior = 36;
 radio_interior = 24;
 
 radio_tubo = 2;   // grosor tubo presionado
-radio_tubo_real = 3.5;
+radio_tubo_real = 3;
 
 radio_entrada_tubo = 2.5;
 
@@ -33,6 +33,7 @@ g_tope_cojinetes = 1;
 bisel_cojinete = 1;
 
 
+
 /*~~ Pieza ~~*/
 mirror([0, 1, 0]) {
     media_bisagra_sin_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
@@ -41,6 +42,8 @@ mirror([0, 1, 0]) {
         radio_tubo_real = radio_tubo_real, bisel_cojinete = bisel_cojinete );
 }
 
+
+/*
 translate([0, - radio_interior/4, 0]) {
     media_bisagra_con_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
         largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
@@ -154,44 +157,37 @@ module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_bo
     difference(){
         difference(){
             union(){
-                    // Semi ciculo central
-                    difference(){
-                        // exterior
-                        cylinder( r = radio_exterior, altura, $fn = 100 ); 
-                        // interior
-                        cylinder(r = radio_interior - bisel_cojinete, altura, $fn = 100 ); 
-                    }
-                    // boquilla
-                    color("red")
-                    translate( [ radio_exterior + largo_boquilla / 2 - ( radio_exterior - radio_interior ), 0 , altura / 2 ] ) 
+                // Semi ciculo central
+                difference(){
+                    // exterior
+                    cylinder( r = radio_exterior, altura, $fn = 100 ); 
+                    // interior
+                    cylinder(r = radio_interior - bisel_cojinete, altura, $fn = 100 ); 
+                }
+                // boquilla
+                color("red")
+                translate( [ radio_exterior + largo_boquilla / 2 - ( radio_exterior - radio_interior ), 0 , altura / 2 ] ) 
                     cube( [ largo_boquilla , ancho_boquilla * 2 , altura ] , center=true ); 
-
-                }
-
-                    // taladro boquilla
-                    color("blue")
-                    translate( [ radio_exterior + largo_boquilla / 2 , - radio_tubo , altura * 2 + g_tope_cojinetes  ] )
-                    // @todo tiene que pasar a ser un cuadrado
-                    cube(size=[largo_boquilla * 2, radio_tubo_real * 2, altura * 4], center=true);
-
-
-                // Taladro camino interior del tubo
-                translate([0, 0, g_tope_cojinetes ]) {
-                    cylinder(r = radio_interior + radio_tubo, altura, $fn = 100 ); 
-                }
             }
-
-            // ESTA PARTE ES MUUUUUU GUARRA AJUSTANDO A OJO!!
-            translate([ radio_interior + suavizar_salida_tubo + radio_tubo_real - 3, 
-                - ( suavizar_salida_tubo + radio_tubo_real * 3 - 1.5), 
-                radio_tubo_real + grosor_pared_exterior_tubo_boquilla ]) {
-                intersection(){
-                    // cuadrado extruido
-                    rotate_extrude(convexity = 10)
-                    translate([ suavizar_salida_tubo + radio_tubo_real * 2, 0 , 0 ] )
-                    union(){
-                        square(size=[radio_tubo_real * 2 , radio_tubo_real * 2], center = true);
-                    }
+            // Taladro boquilla
+            color("blue")
+            translate([radio_exterior, -radio_tubo_real, altura])
+                rotate([0, 90, 0])
+                    cylinder(r=radio_tubo_real, h=largo_boquilla * 2, center=true, $fn = 30);
+            // Taladro camino interior del tubo
+            translate([0, 0, g_tope_cojinetes ])
+                cylinder(r = radio_interior + radio_tubo, altura, $fn = 100 ); 
+        }
+        // ESTA PARTE ES MUUUUUU GUARRA AJUSTANDO A OJO!!
+        translate([ radio_interior + suavizar_salida_tubo + radio_tubo_real - 2, 
+            - ( suavizar_salida_tubo + radio_tubo_real * 3 - 1.5), 
+            radio_tubo_real + grosor_pared_exterior_tubo_boquilla ]) {
+            intersection(){
+                // cuadrado extruido
+                rotate_extrude(convexity = 10)
+                translate([ suavizar_salida_tubo + radio_tubo_real * 2, 0 , 0 ] )
+                    square(size=[radio_tubo_real * 2 , radio_tubo_real * 2], center = true);
+                    
                     // Cuadrado que representa la parte que queremos quedarnos del toroide para encajarla en la salida del tubo    
                     translate([-( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2, 
                         ( suavizar_salida_tubo + radio_tubo_real * 4 ) / 2 , 0])
@@ -204,12 +200,12 @@ module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_bo
             translate( [ - radio_exterior , 0 , 0 ] ) 
             cube( [ ( radio_exterior + altura + largo_boquilla ) * 2, radio_exterior , altura ] ); 
         }
-    }
+}
 
 
-    module media_bisagra_con_eje( radio_interior = 24, radio_exterior = 36, largo_boquilla = 20,
+module media_bisagra_con_eje( radio_interior = 24, radio_exterior = 36, largo_boquilla = 20,
         ancho_boquilla = 10, altura = 10, radio_tubo = 3.5, g_tope_cojinetes = 1, radio_tubo_real = 3.5, bisel_cojinete = 1
-    ){
+){
         difference(){
             difference(){
                 union(){
@@ -242,11 +238,11 @@ linear_extrude(height =altura)
 polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radio_exterior , 0  ] , 
     [ -radio_exterior * 0.707 , -radio_exterior * 0.707 ] ] , convexity = n);
 }
-                    // taladro boquilla
-                    color("blue")
-                    translate( [ radio_exterior + largo_boquilla / 2 , - radio_tubo , altura * 2 + g_tope_cojinetes  ] )
-                    // @todo tiene que pasar a ser un cuadrado
-                    cube(size=[largo_boquilla * 2, radio_tubo_real * 2, altura * 4], center=true);
+            // Taladro boquilla
+            color("blue")
+            translate([radio_exterior, -radio_tubo_real, altura])
+                rotate([0, 90, 0])
+                    cylinder(r=radio_tubo_real, h=largo_boquilla * 2, center=true, $fn = 30);
 
 
                 // Taladro camino interior del tubo
