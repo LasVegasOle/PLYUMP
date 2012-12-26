@@ -11,12 +11,12 @@
 // Soporte lateral de cierre para el extrusor
 //bisagra_extrusor();
 
-altura = 11;
+altura = 10;
 radio_exterior = 36;
 radio_interior = 24;
 
 radio_tubo = 2;   // grosor tubo presionado
-radio_tubo_real = 3;
+radio_tubo_real = 3.25;
 
 radio_entrada_tubo = 2.5;
 
@@ -43,7 +43,7 @@ mirror([0, 1, 0]) {
 }
 
 
-/*
+
 translate([0, - radio_interior/4, 0]) {
     media_bisagra_con_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
         largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
@@ -252,7 +252,7 @@ polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radi
             }
 
             // ESTA PARTE ES MUUUUUU GUARRA AJUSTANDO A OJO!!
-            translate([ radio_interior + suavizar_salida_tubo + radio_tubo_real - 3, 
+            translate([ radio_interior + suavizar_salida_tubo + radio_tubo_real - 2, 
                 - ( suavizar_salida_tubo + radio_tubo_real * 3 - 1.5), 
                 radio_tubo_real + grosor_pared_exterior_tubo_boquilla ]) {
                 intersection(){

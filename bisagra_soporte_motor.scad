@@ -22,6 +22,7 @@ radio_bisagra = 8;
 diametro_tornillo = 3.4;
 
 radio_tubo = 2;
+radio_tubo_real = 3.25;
 
 nema_17_distancia_entre_tornillos = 31;
 nema_17_diagonal_entre_tornillos = 44;
@@ -45,7 +46,7 @@ color("Plum")
 mirror([0, 1, 0]) {
     media_bisagra_sin_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
         largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
-        altura = altura / 2 , radio_tubo = radio_tubo );
+        altura = altura / 2 , radio_tubo = radio_tubo, radio_tubo_real = radio_tubo_real );
 }
 
 // Parte B
@@ -53,7 +54,7 @@ translate([0, - radio_interior/4, 0])
 union(){
 	    media_bisagra_con_eje(  radio_interior = radio_interior, radio_exterior = radio_exterior, 
         largo_boquilla = largo_boquilla, ancho_boquilla = ancho_boquilla, 
-        altura = altura / 2 , radio_tubo = radio_tubo);
+        altura = altura / 2 , radio_tubo = radio_tubo, radio_tubo_real = radio_tubo_real);
 	// El ángulo de 26 esta hecho a ojímetro ajustando la piezas hasta que "encaja"
 	// Taladramos un cilindro al soporte del motor para que no sobresalga en el interior de la bisagra
 	difference(){
