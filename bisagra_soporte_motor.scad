@@ -2,7 +2,7 @@
 /* peristaltic extruder for 3d printing     		  */
 /* file: bisagra_soporte_motor.scad				 	  */
 /* author: luis rodriguez				 	          */
-/* version: 0.1						 		          */
+/* version: 0.2					 		          */
 /* w3b: tiny.cc/lyu     					 		  */
 /* info:				    				 		  */
 /******************************************************/
@@ -15,8 +15,8 @@ altura = 10;
 radio_exterior = 36;
 radio_interior = 24;
 
-ancho_boquilla = 10;
-largo_boquilla = 30;
+ancho_boquilla = 20;
+largo_boquilla = 25;
 
 radio_bisagra = 8;
 diametro_tornillo = 3.4;
