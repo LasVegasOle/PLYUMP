@@ -2,7 +2,7 @@
 /* peristaltic extruder for 3d printing     		  */
 /* file: bisagra_soporte_motor.scad				 	  */
 /* author: luis rodriguez				 	          */
-/* version: 0.2					 		          */
+/* version: 0.29					 		          */
 /* w3b: tiny.cc/lyu     					 		  */
 /* info:				    				 		  */
 /******************************************************/
@@ -11,11 +11,11 @@
 use <modulo_bisagra.scad>
 
 /* ~~ Parámetros ~~ */
-altura = 10;
+altura = 30;
 radio_exterior = 36;
 radio_interior = 24;
 
-ancho_boquilla = 20;
+ancho_boquilla = 10;
 largo_boquilla = 25;
 
 radio_bisagra = 8;
@@ -27,13 +27,13 @@ radio_tubo_real = 3.25;
 nema_17_distancia_entre_tornillos = 31;
 nema_17_diagonal_entre_tornillos = 44;
 
-diametro_tornillo_guia = 4.4;
+diametro_tornillo_guia = 3.7;
 // Lo diferencio para permitir que el eje ("shaft") del motor se desplace a través de la guía central abierta
-diametro_tornillo_guia_central = 4.4;
+diametro_tornillo_guia_central = 3.7;
 
 margen_tornillo_motor = 4;
 
-altura_soporte_motor = 5;
+altura_soporte_motor = 7;
 
 longitud_guia_tornillo_motor = 35;
 

@@ -2,16 +2,12 @@
 /* peristaltic extruder for 3d printing     		  */
 /* file: modulo_bisagra.scad			 		      */
 /* author: luis rodriguez				 	          */
-/* version: 0.2						 		          */
+/* version: 0.28					 		          */
 /* w3b: tiny.cc/lyu     					 		  */
 /* info:				    				 		  */
 /******************************************************/
-// @todo: - 
 
-// Soporte lateral de cierre para el extrusor
-//bisagra_extrusor();
-
-altura = 10;
+altura = 30;
 radio_exterior = 36;
 radio_interior = 24;
 
@@ -20,8 +16,8 @@ radio_tubo_real = 3.25;
 
 radio_entrada_tubo = 2.5;
 
-ancho_boquilla = 15;
-largo_boquilla = 30;
+ancho_boquilla = 10;
+largo_boquilla = 25;
 
 radio_bisagra = 8;
 diametro_tornillo = 3.4;
@@ -32,7 +28,32 @@ grosor_pared_exterior_tubo_boquilla = 1;
 g_tope_cojinetes = 1;
 bisel_cojinete = 1;
 
+tornillos_rigidez = 6;
+angulo_offset_tornillos_rigidez = 30;
+
 /*~~ Pieza ~~*/
+/*
+                difference(){
+                    // exterior
+                    cylinder( r = radio_exterior, altura/2, $fn = 100 ); 
+                    // interior
+                    cylinder(r = radio_interior - bisel_cojinete - 1, altura / 2, $fn = 100 ); 
+
+                    // Taladros verticales para mayor rigidez
+                    for ( i = [0 : tornillos_rigidez - 1] )
+                        {
+                            rotate( angulo_offset_tornillos_rigidez + i * 360 / tornillos_rigidez)
+                            translate([ 0, radio_exterior - ( ( radio_exterior - radio_interior - radio_tubo ) / 2 ), 0]){
+                                // figura a repetir
+                                cylinder(r=diametro_tornillo/2, altura * 2, $fn = 29, center=true);
+                            }
+                        }
+                    translate([ radio_exterior + 8, 0, 0]) {
+                        cylinder(r=20, h=10, center=true);
+                    }
+                }
+*/
+
 
 difference(){
     union(){
@@ -49,13 +70,6 @@ difference(){
                 radio_tubo_real = radio_tubo_real , bisel_cojinete = bisel_cojinete );   
         }
     }
-// Cortando la boquilla
-translate([radio_exterior - 2, 0, 0])
-    cube(size=[diametro_tornillo, ancho_boquilla * 3, 10], center=false);
-
-//Reducir grosor boquilla
-translate([radio_exterior + diametro_tornillo * 4, ancho_boquilla, altura -  bisel_cojinete])
-    cube(size=[largo_boquilla, ancho_boquilla * 2, 10], center=true);
 }
 
 /*~~ Módulos ~~*/
@@ -81,20 +95,28 @@ module media_bisagra_sin_eje( radio_interior = 24, radio_exterior = 36, largo_bo
             }
             // Taladro boquilla
             color("blue")
-            translate([radio_exterior, -radio_tubo_real, altura])
-            rotate([0, 90, 0])
-            cylinder(r=radio_tubo_real, h=largo_boquilla * 2, center=true, $fn = 30);
+                translate([radio_exterior, -radio_tubo_real, altura])
+                    rotate([0, 90, 0])
+                        cylinder(r=radio_tubo_real, h=largo_boquilla * 2, center=true, $fn = 30);
             // Taladro camino interior del tubo
             translate([0, 0, g_tope_cojinetes ])
-            cylinder(r = radio_interior + radio_tubo, altura, $fn = 100 ); 
-            // holders drills
-            translate([radio_interior + 3*largo_boquilla / 4, -(ancho_boquilla + 2 * radio_tubo_real) / 2 , 0])
-            cylinder(r = diametro_tornillo / 2 , h=altura * 4, $fn = 20, center=true);
+                cylinder(r = radio_interior + radio_tubo, altura, $fn = 100 ); 
+
+            // Taladros verticales para mayor rigidez
+            for ( i = [0 : tornillos_rigidez - 1] )
+                {
+                    rotate( angulo_offset_tornillos_rigidez + i * 360 / tornillos_rigidez)
+                    translate([ radio_exterior - ( ( radio_exterior - radio_interior - radio_tubo ) / 2 ), 0, 0]){
+                        // figura a repetir
+                        cylinder(r=diametro_tornillo/2, altura * 2, $fn = 29, center=true);
+                    }
+                }
+
         }
         // ESTA PARTE ES MUUUUUU GUARRA AJUSTANDO A OJO!!
         translate([ radio_interior + suavizar_salida_tubo + radio_tubo_real - 2, 
             - ( suavizar_salida_tubo + radio_tubo_real * 3 - 1.5), 
-            radio_tubo_real + grosor_pared_exterior_tubo_boquilla ]) {
+            altura ]) {
             intersection(){
                 // cuadrado extruido
                 rotate_extrude(convexity = 10)
@@ -157,9 +179,15 @@ polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radi
             rotate([0, 90, 0])
             cylinder(r=radio_tubo_real, h=largo_boquilla * 2, center=true, $fn = 30);
 
-                        // holders drills
-                        translate([radio_interior + 3*largo_boquilla / 4, -(ancho_boquilla + 2 * radio_tubo_real) / 2 , 0])
-                        cylinder(r = diametro_tornillo / 2 , h=altura * 4, $fn = 20, center=true);
+                        // Taladros verticales para mayor rigidez
+            for ( i = [0 : tornillos_rigidez - 1] )
+                {
+                    rotate( angulo_offset_tornillos_rigidez + i * 360 / tornillos_rigidez)
+                    translate([ radio_exterior - ( ( radio_exterior - radio_interior - radio_tubo ) / 2 ), 0, 0]){
+                        // figura a repetir
+                        cylinder(r=diametro_tornillo/2, altura * 2, $fn = 29, center=true);
+                    }
+                }
 
                 // Taladro camino interior del tubo
                 translate([0, 0, g_tope_cojinetes ]) {
@@ -170,7 +198,7 @@ polygon( [ [ - ( radio_exterior + radio_bisagra ) ,  - radio_bisagra ] , [ -radi
             // ESTA PARTE ES MUUUUUU GUARRA AJUSTANDO A OJO!!
             translate([ radio_interior + suavizar_salida_tubo + radio_tubo_real - 2, 
                 - ( suavizar_salida_tubo + radio_tubo_real * 3 - 1.5), 
-                radio_tubo_real + grosor_pared_exterior_tubo_boquilla ]) {
+                altura ]) {
                 intersection(){
                     // cuadrado extruido
                     rotate_extrude(convexity = 10)

@@ -11,7 +11,7 @@
 //	circles=8);
 
 //Complex Spur Gear Test:
-test_gears ();
+//test_gears ();
 
 /*gear (number_of_teeth=34,
 	circular_pitch=300,
@@ -25,6 +25,8 @@ test_gears ();
 
 // Meshing Double Helix:
 //test_meshing_double_helix ();
+
+test_double_helix_gear();
 
 module test_meshing_double_helix(){
 	meshing_double_helix ();
