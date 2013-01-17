@@ -34,9 +34,8 @@ module half_gear_peristaltic(){
 	gear (number_of_teeth=gear_peristaltic_teeth,
 		circular_pitch=circular_pitch,
 		pressure_angle=pressure_angle,
-		gear_thickness = 608zz_thickness,
-		rim_thickness = 608zz_thickness,
-		rim_width = rim_width,
+		gear_thickness = gear_peristaltic_thickness/2,
+		rim_thickness = gear_peristaltic_thickness/2,
 		hub_thickness = 0,
 		twist=twist/gear_peristaltic_teeth);
 }

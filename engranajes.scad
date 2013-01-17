@@ -7,7 +7,7 @@
 /* info:				    				 		  */
 /******************************************************/
 // @todo: - 
-
+include <parameters.scad>
 use <involute_gears.scad>
 
 // Rim = llanta
@@ -30,12 +30,14 @@ cylinder( r = radio, h = 8, center = true );
 }
 
 }*/
+
 relacion_engranaje = 2;
 radio_engranaje_peristaltico = 70 / 2;
 dientes_engranaje_motor = 13;
+
 dientes_engranaje_peristaltico = relacion_engranaje * dientes_engranaje_motor;
 circular_pitch = radio_engranaje_peristaltico / dientes_engranaje_peristaltico * 360;
-
+echo(str("Circular pitch= ",circular_pitch));
 altura_llanta_engranaje = 12/2;
 ancho_llanta_engranaje = 4;
 altura_interior_engranaje = 5;
@@ -62,6 +64,7 @@ largo_tuerca_3mm = 5.8;
 twist=200;
 height=20;
 pressure_angle=30;
+
 
 r_cojinetes_con_holgura = r_cojinetes + holgura_entre_cojinetes / 2;
 r_posicion_cojinetes = ( r_cojinetes_con_holgura - sin( a_entre_cojinetes / 2 ) * r_cojinetes_con_holgura ) 

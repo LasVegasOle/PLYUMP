@@ -54,6 +54,7 @@ angulo_offset_tornillos_rigidez = 30;
                 }
 */
 
+/*
 
 difference(){
     union(){
