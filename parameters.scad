@@ -1,6 +1,6 @@
 /******************************************************/
 /* PLYUMP                                             */
-/* file: parameters.scad				 			  */
+/* file: parameters.scad                              */
 /* author: Luis Rodriguez                             */
 /* version: 0.30                                      */
 /* w3b: tiny.cc/lyu                                   */
@@ -10,7 +10,7 @@
 birthday_day = 26;
 
 /* bearings dimensions (mm) */
-bearings_clearance = 0.4; 	// Used to "easily fit bearings into their holes"
+bearings_clearance = 0.5; 	// Used to "easily fit bearings into their holes"
 // 608zz id=8 od=22 thickness=7
 608zz_inside_diameter = 8;
 608zz_outside_diameter = 22;
