@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: gear_motor.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.30                                      */
+/* version: 0.31                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info:                                              */
 /******************************************************/
@@ -44,7 +44,7 @@ module half_gear_motor(){
 
 module gear_motor_neck(){
 	translate([0, 0, (gear_motor_thickness + gear_motor_neck_height ) /2 ])
-		cylinder( r = gear_motor_neck_diameter/2, h = gear_motor_thickness + gear_motor_neck_height, 
+		cylinder( r = gear_motor_neck_diameter/2, h = gear_motor_neck_height, 
 			$fn=birthday_day, center=true);
 }
 

@@ -2,14 +2,14 @@
 /* PLYUMP                                             */
 /* file: parameters.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.30                                      */
+/* version: 0.31                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info: This file contains all the shared parameters */
 /******************************************************/
 
 birthday_day = 26;
 
-/* bearings dimensions (mm) */
+/* Bearings dimensions (mm) */
 bearings_clearance = 0.5; 	// Used to "easily fit bearings into their holes"
 // 608zz id=8 od=22 thickness=7
 608zz_inside_diameter = 8;
@@ -21,45 +21,90 @@ bearings_clearance = 0.5; 	// Used to "easily fit bearings into their holes"
 624zz_outside_diameter = 13;
 624zz_thickness = 5;
 
-/* Gears */
-// Common
-gear_ratio = 3;
-gear_motor_teeth = 11;
-gear_peristaltic_thickness = 608zz_thickness * 2; // "*2" due to herringbone!
-gear_peristaltic_teeth = gear_ratio*gear_motor_teeth;
-gear_peristaltic_radius = 80/2;
+/* NEMA 17 */
+nema_17_height = 42.2;
+nema_17_screw_distance = 31.04;
+nema_rollers_clearance = 3;
 
-circular_pitch = 360*gear_peristaltic_radius/gear_peristaltic_teeth;
-
-// Pitch diameter: Diameter of pitch circle.
-pitch_diameter_gear_peristaltic  =  gear_peristaltic_teeth * circular_pitch / 180;
-pitch_radius_gear_peristaltic = pitch_diameter_gear_peristaltic/2;
-// Diametrial pitch: Number of teeth per unit length.
-pitch_diametrial_gear_peristaltic = gear_peristaltic_teeth / pitch_diameter_gear_peristaltic;
-// Addendum: Radial distance from pitch circle to outside circle.
-addendum_gear_peristaltic = 1/pitch_diametrial_gear_peristaltic;
-//Outer Circle
-outside_diameter_gear_peristaltic = pitch_radius_gear_peristaltic+addendum_gear_peristaltic;
-echo(str("Outside diameter gear peristaltic= ",outside_diameter_gear_peristaltic));
-
-gear_motor_height = 8;
-gear_motor_neck_height = 8;
-gear_motor_neck_diameter = 18;
-gear_motor_thickness = 608zz_thickness * 2; // "*2" due to herringbone!
-gear_motor_shaft_diameter = 5.5;
-
+/* ROLLERS */
 rollers_number = 12;
 rollers_clearance = 0;
 rollers_angle = 360 / ( rollers_number );
-rollers_diameter = 624zz_outside_diameter;
+rollers_wall = 2;
+rollers_diameter = 624zz_outside_diameter + rollers_wall * 2;
 rollers_radius = rollers_diameter / 2;
-rollers_shaft_diameter = 624zz_inside_diameter;
+rollers_shaft_diameter = 624zz_inside_diameter + bearings_clearance;
+rollers_bearings_contacts_thickness = 2;
+rollers_bearings_contacts_height = 3;
+
+rollers_width = 33;
+rollers_clearance = 1;
+rollers_easy_printing_inverted_cone_thickness = 624zz_thickness;
+
+rollers_holder_thickness = 624zz_thickness/2;
+rollers_holder_central_bearing_support_thickness = 3;
+rollers_holder_central_bearing_support_height = 624zz_thickness;
 
 rollers_radius_plus_clearance = rollers_radius + rollers_clearance / 2;
 rollers_position_minimum_radius_minus_roller_radius = ( rollers_radius_plus_clearance - sin( rollers_angle / 2 ) 
 	* rollers_radius_plus_clearance ) / sin( rollers_angle / 2 ) ;
 rollers_position_minimum_radius = rollers_position_minimum_radius_minus_roller_radius + rollers_radius;
 echo(str("Rollers position radius = ", rollers_position_minimum_radius ) );
+
+/* Gears */
+// Common
+gear_ratio = 3;
+gear_motor_teeth = 11;
+gear_peristaltic_teeth = gear_ratio*gear_motor_teeth;
+gear_peristaltic_thickness = 608zz_thickness * 2; // "*2" due to herringbone!
+
+// Circular pitch is calculate through pitch radius for peristaltic and motor gear
+// in order to avoid rollers crashing nema 17 motor
+//
+// 		nema_17_height + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance = 
+// 		gear_peristaltic_pitch_radius + gear_motor_pitch_radius
+//
+//		gear_peristaltic_pitch_radius + gear_motor_pitch_radius =
+//		gear_peristaltic_teeth * circular_pitch / 360 + gear_motor_teeth * circular_pitch / 360 =
+//		(gear_peristaltic_teeth + gear_motor_teeth)/360 * circular_pitch
+//
+//		circular_pitch = 
+//		360*(nema_17_height + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance) /
+//		(gear_peristaltic_teeth + gear_motor_teeth)	
+
+//circular_pitch = 360*gear_peristaltic_radius/gear_peristaltic_teeth;
+circular_pitch = 360 * (nema_17_height/2 + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance) /
+		(gear_peristaltic_teeth + gear_motor_teeth);
+
+// Pitch diameter: Diameter of pitch circle.
+gear_peristaltic_pitch_diameter = gear_peristaltic_teeth * circular_pitch / 180;
+gear_peristaltic_pitch_radius = gear_peristaltic_pitch_diameter/2;
+echo(str("Pitch radius gear peristaltic= ",gear_peristaltic_pitch_radius));
+// Diametrial pitch: Number of teeth per unit length.
+gear_peristaltic_pitch_diametrial = gear_peristaltic_teeth / gear_peristaltic_pitch_diameter;
+// Addendum: Radial distance from pitch circle to outside circle.
+gear_peristaltic_addendum = 1/gear_peristaltic_pitch_diametrial;
+//Outer Circle
+gear_peristaltic_outside_diameter = gear_peristaltic_pitch_radius+gear_peristaltic_addendum;
+echo(str("Outside diameter gear peristaltic= ",gear_peristaltic_outside_diameter));
+
+gear_motor_height = 8;
+gear_motor_neck_height = 10;
+gear_motor_neck_diameter = 18;
+gear_motor_thickness = 608zz_thickness * 2; // "*2" due to herringbone!
+gear_motor_shaft_diameter = 5.5;
+
+// Pitch diameter: Diameter of pitch circle.
+gear_motor_pitch_diameter = gear_motor_teeth * circular_pitch / 180;
+gear_motor_pitch_radius = gear_motor_pitch_diameter/2;
+echo(str("Pitch radius gear motor= ",gear_motor_pitch_radius));
+// Diametrial pitch: Number of teeth per unit length.
+gear_motor_pitch_diametrial = gear_motor_teeth / gear_motor_pitch_diameter;
+// Addendum: Radial distance from pitch circle to outside circle.
+gear_motor_addendum = 1/gear_motor_pitch_diametrial;
+//Outer Circle
+gear_motor_outside_diameter = gear_motor_pitch_radius+gear_motor_addendum;
+echo(str("Outside diameter gear motor= ",gear_motor_outside_diameter));
 
 pressure_angle=30;
 twist=200;
