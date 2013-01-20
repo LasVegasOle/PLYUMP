@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: pump_body.scad                               */
 /* author: Luis Rodriguez                             */
-/* version: 0.30                                      */
+/* version: 0.31                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info:                                              */
 /******************************************************/
@@ -12,7 +12,7 @@ include <parameters.scad>
 /*Base*/
 pump_body_base_thickness = 5;
 pump_body_base_width_clearance = 10;
-pump_body_base_width = gear_peristaltic_thickness + 2 * ( rollers_width + pump_body_base_thickness + gear_motor_bolt_width ) + pump_body_base_width_clearance;
+pump_body_base_width = gear_peristaltic_thickness + 2 * ( rollers_width + rollers_holder_thickness + 2*pump_body_base_thickness + 2*gear_motor_bolt_width ) + pump_body_base_width_clearance;
 pump_body_base_length = gear_peristaltic_pitch_diameter;
 pump_body_motor_holder_length = 4;
 pump_body_motor_holder_width = 4;
