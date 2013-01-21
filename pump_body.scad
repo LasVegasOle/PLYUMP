@@ -28,8 +28,14 @@ echo(str("Lateral height = ", pump_body_lateral_height));
 
 pump_body_lateral_opening_height = pump_body_shaft_height;
 pump_body_lateral_thickness = pump_body_base_thickness * 2; 
-pump_body_lateral_base_angle = atan( pump_body_lateral_height / pump_body_base_length );
+pump_body_lateral_base_angle = atan( pump_body_lateral_height / (pump_body_base_length/2) );
 echo(str("Lateral base angle = ", pump_body_lateral_base_angle));
+
+pump_body_lateral_side_lenght = pump_body_lateral_height / sin(pump_body_lateral_base_angle);
+echo(str("Lateral side lenght = ", pump_body_lateral_side_lenght));
+
+pump_body_crossed_beam_height = ( pump_body_lateral_side_lenght/2 * sin(pump_body_lateral_base_angle) )/2;
+
 
 // Testing
 pump_body();
@@ -161,42 +167,44 @@ module lateral_opening(){
 
 module crossed_beam(){
 	color("RosyBrown")
-	rotate([0, 0, 0]) 
 	
+translate([0, pump_body_base_length/2 - pump_body_lateral_thickness/2, 0]) 
+	rotate([ (90 - pump_body_lateral_base_angle ) , 0, 0]) 
+	translate([0, 0, pump_body_crossed_beam_height]) 
 	polyhedron(
 		points=[ 	
 
 		[pump_body_base_width/2 - pump_body_lateral_thickness, 
 		pump_body_lateral_thickness/2,, 
-		pump_body_lateral_height - pump_body_lateral_thickness], // 0
+		pump_body_crossed_beam_height], // 0
 
-		[pump_body_base_width/2 - pump_body_lateral_thickness,
+		[pump_body_base_width/2 - pump_body_lateral_thickness - pump_body_lateral_thickness,
 		pump_body_lateral_thickness/2,, 
-		pump_body_lateral_height], // 1
+		pump_body_crossed_beam_height], // 1
 
 		[-pump_body_base_width/2 + pump_body_lateral_thickness,
 		pump_body_lateral_thickness/2,,
-		pump_body_base_thickness/2], //2
+		-pump_body_crossed_beam_height], //2
 
 		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_lateral_thickness,
 		pump_body_lateral_thickness/2,,
-		pump_body_base_thickness/2], // 3
+		-pump_body_crossed_beam_height], // 3
 
 		[pump_body_base_width/2 - pump_body_lateral_thickness,
 		- pump_body_lateral_thickness/2,
-		pump_body_lateral_height - pump_body_lateral_thickness], // 4
+		pump_body_crossed_beam_height], // 4
 
-		[pump_body_base_width/2 - pump_body_lateral_thickness,
+		[pump_body_base_width/2 - pump_body_lateral_thickness - pump_body_lateral_thickness,
 		- pump_body_lateral_thickness/2,
-		pump_body_lateral_height],// 5
+		pump_body_crossed_beam_height],// 5
 
 		[-pump_body_base_width/2 + pump_body_lateral_thickness,
 		- pump_body_lateral_thickness/2,
-		pump_body_base_thickness/2], // 6
+		- pump_body_crossed_beam_height], // 6
 
 		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_lateral_thickness,
 		- pump_body_lateral_thickness/2,
-		pump_body_base_thickness/2], // 7
+		- pump_body_crossed_beam_height], // 7
 
 		 ],    
 
