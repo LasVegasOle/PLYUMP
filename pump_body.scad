@@ -14,17 +14,22 @@ pump_body_base_thickness = 5;
 pump_body_base_width_clearance = 10;
 pump_body_base_width = gear_peristaltic_thickness + 2 * ( rollers_width + rollers_holder_thickness + 2*pump_body_base_thickness + 2*gear_motor_bolt_width ) + pump_body_base_width_clearance;
 pump_body_base_length = gear_peristaltic_pitch_diameter;
-pump_body_motor_holder_length = 4;
-pump_body_motor_holder_width = 4;
 echo(str("base_width = ", pump_body_base_width));
 echo(str("base_length = ", pump_body_base_length));
+
+pump_body_motor_holder_length = 4;
+pump_body_motor_holder_width = 4;
+
 pump_body_shaft_height = nema_17_height + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance;
 echo(str("Pump body shaft height = ", pump_body_shaft_height));
 
-pump_body_base_lateral_height = pump_body_shaft_height + 608zz_outside_diameter*3/2;
-echo(str("base_lateral_height = ", pump_body_base_lateral_height));
+pump_body_lateral_height = pump_body_shaft_height + 608zz_outside_diameter*3/2;
+echo(str("Lateral height = ", pump_body_lateral_height));
 
-pump_base_lateral_opening_height = pump_body_shaft_height;
+pump_body_lateral_opening_height = pump_body_shaft_height;
+pump_body_lateral_thickness = pump_body_base_thickness * 2; 
+pump_body_lateral_base_angle = atan( pump_body_lateral_height / pump_body_base_length );
+echo(str("Lateral base angle = ", pump_body_lateral_base_angle));
 
 // Testing
 pump_body();
@@ -37,7 +42,17 @@ module pump_body(){
 			base();
 			lateral();
 			mirror(1,0,0)
-			lateral();
+				lateral();
+			crossed_beam();
+			// mirror([1, 0, 0]) 
+			// 	crossed_beam();
+			// mirror([0, 1, 0]) {
+			// 	crossed_beam();
+			// mirror([1, 0, 0]) 
+			// 	crossed_beam();
+			// }
+			
+			
 			//motor_screw_holder();
 			// translate([pump_body_base_width/2, 0, nema_17_height/2 + pump_body_base_thickness/2]) 
 			// cube(size=[100, nema_17_height, nema_17_height], center=true);
@@ -81,11 +96,11 @@ module base_opening(){
 		translate([pump_body_base_width/2, 0, pump_body_base_thickness/2]) 
 		polyhedron(
 			points=[ 	[0,-pump_body_base_length/2,0],
-			[0,0,pump_body_base_lateral_height],
+			[0,0,pump_body_lateral_height],
 			[0,pump_body_base_length/2,0],
-			[-pump_body_base_thickness*2,-pump_body_base_length/2,0],
-			[-pump_body_base_thickness*2,0,pump_body_base_lateral_height],
-			[-pump_body_base_thickness*2,pump_body_base_length/2,0],  ],                                 
+			[-pump_body_lateral_thickness,-pump_body_base_length/2,0],
+			[-pump_body_lateral_thickness,0,pump_body_lateral_height],
+			[-pump_body_lateral_thickness,pump_body_base_length/2,0],  ],                                 
 			triangles=[ 	[0,1,2],
 			[5,4,3],
 			[2,1,4],
@@ -126,13 +141,14 @@ module lateral_opening(){
 	color("Red")
 	translate([pump_body_base_width/2, 0, pump_body_base_thickness/2]) 
 	polyhedron(
-		points=[ 	[0,-pump_body_base_length/2 + pump_body_base_thickness*2, 0],
-		[ 0, 0, pump_base_lateral_opening_height],
-		[0,pump_body_base_length/2 - pump_body_base_thickness*2,0],
-		[-pump_body_base_thickness*2,-pump_body_base_length/2 + pump_body_base_thickness*2,0],
-		[-pump_body_base_thickness*2,0, pump_base_lateral_opening_height],
-		[-pump_body_base_thickness*2,pump_body_base_length/2 - pump_body_base_thickness*2,0],  ],                                 
-		triangles=[ 	[0,1,2],
+		points=[ 	[0,-pump_body_base_length/2 + pump_body_lateral_thickness, 0],
+		[ 0, 0, pump_body_lateral_opening_height],
+		[0,pump_body_base_length/2 - pump_body_lateral_thickness,0],
+		[-pump_body_lateral_thickness,-pump_body_base_length/2 + pump_body_lateral_thickness,0],
+		[-pump_body_lateral_thickness,0, pump_body_lateral_opening_height],
+		[-pump_body_lateral_thickness,pump_body_base_length/2 - pump_body_lateral_thickness,0],  ],                                 
+		triangles=[ 	
+		[0,1,2],
 		[5,4,3],
 		[2,1,4],
 		[2,4,5],
@@ -141,4 +157,61 @@ module lateral_opening(){
 		[0,2,5],
 		[0,5,3] ]                         
 	);
+}
+
+module crossed_beam(){
+	color("RosyBrown")
+	rotate([0, 0, 0]) 
+	
+	polyhedron(
+		points=[ 	
+
+		[pump_body_base_width/2 - pump_body_lateral_thickness, 
+		pump_body_lateral_thickness/2,, 
+		pump_body_lateral_height - pump_body_lateral_thickness], // 0
+
+		[pump_body_base_width/2 - pump_body_lateral_thickness,
+		pump_body_lateral_thickness/2,, 
+		pump_body_lateral_height], // 1
+
+		[-pump_body_base_width/2 + pump_body_lateral_thickness,
+		pump_body_lateral_thickness/2,,
+		pump_body_base_thickness/2], //2
+
+		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_lateral_thickness,
+		pump_body_lateral_thickness/2,,
+		pump_body_base_thickness/2], // 3
+
+		[pump_body_base_width/2 - pump_body_lateral_thickness,
+		- pump_body_lateral_thickness/2,
+		pump_body_lateral_height - pump_body_lateral_thickness], // 4
+
+		[pump_body_base_width/2 - pump_body_lateral_thickness,
+		- pump_body_lateral_thickness/2,
+		pump_body_lateral_height],// 5
+
+		[-pump_body_base_width/2 + pump_body_lateral_thickness,
+		- pump_body_lateral_thickness/2,
+		pump_body_base_thickness/2], // 6
+
+		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_lateral_thickness,
+		- pump_body_lateral_thickness/2,
+		pump_body_base_thickness/2], // 7
+
+		 ],    
+
+		triangles=[ 	
+		[0,1,2],
+		[0,2,3],
+		[0,4,5],
+		[0,5,1],
+		[3,2,7],
+		[7,2,6],
+		[7,4,0],
+		[0,3,7],
+		[2,1,5],
+		[5,6,2],
+		[4,7,6],
+		[4,6,5]]                         
+	);	
 }
