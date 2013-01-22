@@ -35,7 +35,9 @@ pump_body_lateral_side_lenght = pump_body_lateral_height / sin(pump_body_lateral
 echo(str("Lateral side lenght = ", pump_body_lateral_side_lenght));
 
 pump_body_crossed_beam_height = ( pump_body_lateral_side_lenght/2 * sin(pump_body_lateral_base_angle) )/2;
-
+echo(str("pump_body_crossed_beam_height = ", pump_body_crossed_beam_height));
+pump_body_crossed_beam_length = ( pump_body_lateral_side_lenght/2 * cos(pump_body_lateral_base_angle) )/2;
+echo(str("pump_body_crossed_beam_length = ", pump_body_crossed_beam_length));
 
 // Testing
 pump_body();
