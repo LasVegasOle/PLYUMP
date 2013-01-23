@@ -10,9 +10,10 @@
 include <parameters.scad>
 
 /*Base*/
-pump_body_base_thickness = 5;
+pump_body_base_thickness = 10;
+pump_body_lateral_thickness = pump_body_base_thickness ;//* 2; 
 pump_body_base_width_clearance = 10;
-pump_body_base_width = gear_peristaltic_thickness + 2 * ( rollers_width + rollers_holder_thickness + 2*pump_body_base_thickness + 2*gear_motor_bolt_width ) + pump_body_base_width_clearance;
+pump_body_base_width = gear_peristaltic_thickness + 2 * ( rollers_width + rollers_holder_thickness + 2*pump_body_base_thickness ) + 2 * pump_body_lateral_thickness + pump_body_base_width_clearance;
 pump_body_base_length = gear_peristaltic_pitch_diameter;
 echo(str("base_width = ", pump_body_base_width));
 echo(str("base_length = ", pump_body_base_length));
@@ -27,9 +28,19 @@ pump_body_lateral_height = pump_body_shaft_height + 608zz_outside_diameter*3/2;
 echo(str("Lateral height = ", pump_body_lateral_height));
 
 pump_body_lateral_opening_height = pump_body_shaft_height;
-pump_body_lateral_thickness = pump_body_base_thickness * 2; 
-pump_body_lateral_base_angle = atan( pump_body_lateral_height / pump_body_base_length );
+
+pump_body_lateral_base_angle = atan( pump_body_lateral_height / (pump_body_base_length/2) );
 echo(str("Lateral base angle = ", pump_body_lateral_base_angle));
+
+pump_body_lateral_side_lenght = pump_body_lateral_height / sin(pump_body_lateral_base_angle);
+echo(str("Lateral side lenght = ", pump_body_lateral_side_lenght));
+
+pump_body_crossed_beam_height = ( pump_body_lateral_side_lenght/2 * sin(pump_body_lateral_base_angle) )/2;
+echo(str("pump_body_crossed_beam_height = ", pump_body_crossed_beam_height));
+pump_body_crossed_beam_length = ( pump_body_lateral_side_lenght/2 * cos(pump_body_lateral_base_angle) )/2;
+echo(str("pump_body_crossed_beam_length = ", pump_body_crossed_beam_length));
+
+pump_body_crossed_beam_thickness = pump_body_lateral_thickness;
 
 // Testing
 pump_body();
@@ -43,7 +54,7 @@ module pump_body(){
 			lateral();
 			mirror(1,0,0)
 				lateral();
-			crossed_beam();
+			// crossed_beam();
 			// mirror([1, 0, 0]) 
 			// 	crossed_beam();
 			// mirror([0, 1, 0]) {
@@ -78,12 +89,12 @@ module base(){
 module base_opening(){
 	color("Orange")
 	difference(){
-		cube(size=[pump_body_base_width - pump_body_base_thickness*4 , 
-			pump_body_base_length - pump_body_base_thickness*4, 
+		cube(size=[pump_body_base_width - pump_body_lateral_thickness * 2 , 
+			pump_body_base_length - pump_body_lateral_thickness * 2, 
 			pump_body_base_thickness], center=true);
 
-		translate([pump_body_base_width/2 - nema_17_height/2, 0, 0]) 
-			cube(size=[nema_17_height, 
+		translate([pump_body_base_width/2 - nema_17_height/2 - pump_body_lateral_thickness, 0, 0]) 
+			cube(size=[pump_body_base_width/2 - gear_motor_thickness, 
 				nema_17_height, 
 				pump_body_base_thickness], center=true);
 
@@ -161,42 +172,40 @@ module lateral_opening(){
 
 module crossed_beam(){
 	color("RosyBrown")
-	rotate([0, 0, 0]) 
-	
 	polyhedron(
 		points=[ 	
 
 		[pump_body_base_width/2 - pump_body_lateral_thickness, 
-		pump_body_lateral_thickness/2,, 
-		pump_body_lateral_height - pump_body_lateral_thickness], // 0
+		pump_body_base_length/2 - pump_body_crossed_beam_length, 
+		pump_body_crossed_beam_height + pump_body_base_thickness/2], // 0 done
 
 		[pump_body_base_width/2 - pump_body_lateral_thickness,
-		pump_body_lateral_thickness/2,, 
-		pump_body_lateral_height], // 1
+		pump_body_base_length/2 - pump_body_crossed_beam_length, 
+		pump_body_crossed_beam_height + pump_body_base_thickness/2 + pump_body_crossed_beam_thickness], // 1
 
 		[-pump_body_base_width/2 + pump_body_lateral_thickness,
-		pump_body_lateral_thickness/2,,
-		pump_body_base_thickness/2], //2
+		pump_body_base_length/2,
+		pump_body_base_thickness/2], //2 done
 
-		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_lateral_thickness,
-		pump_body_lateral_thickness/2,,
-		pump_body_base_thickness/2], // 3
-
-		[pump_body_base_width/2 - pump_body_lateral_thickness,
-		- pump_body_lateral_thickness/2,
-		pump_body_lateral_height - pump_body_lateral_thickness], // 4
+		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_crossed_beam_thickness,
+		pump_body_base_length/2,
+		pump_body_base_thickness/2], // 3 done
 
 		[pump_body_base_width/2 - pump_body_lateral_thickness,
-		- pump_body_lateral_thickness/2,
-		pump_body_lateral_height],// 5
+		pump_body_base_length/2 - pump_body_crossed_beam_length - pump_body_crossed_beam_thickness,
+		pump_body_crossed_beam_height], // 4
+
+		[pump_body_base_width/2 - pump_body_lateral_thickness,
+		pump_body_base_length/2 - pump_body_crossed_beam_length - pump_body_crossed_beam_thickness,
+		pump_body_crossed_beam_height + pump_body_crossed_beam_thickness],// 5
 
 		[-pump_body_base_width/2 + pump_body_lateral_thickness,
-		- pump_body_lateral_thickness/2,
-		pump_body_base_thickness/2], // 6
+		pump_body_base_length/2 - pump_body_crossed_beam_thickness,
+		pump_body_base_thickness/2], // 6 done
 
-		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_lateral_thickness,
-		- pump_body_lateral_thickness/2,
-		pump_body_base_thickness/2], // 7
+		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_crossed_beam_thickness,
+		pump_body_base_length/2 - pump_body_crossed_beam_thickness,
+		pump_body_base_thickness/2], // 7 done
 
 		 ],    
 
