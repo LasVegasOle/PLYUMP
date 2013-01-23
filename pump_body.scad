@@ -8,12 +8,15 @@
 /******************************************************/
 
 include <parameters.scad>
+use <gear_peristaltic.scad>
 
 /*Base*/
 pump_body_base_thickness = 10;
 pump_body_lateral_thickness = pump_body_base_thickness ;//* 2; 
 pump_body_base_width_clearance = 10;
-pump_body_base_width = gear_peristaltic_thickness + 2 * ( rollers_width + rollers_holder_thickness + 2*pump_body_base_thickness ) + 2 * pump_body_lateral_thickness + pump_body_base_width_clearance;
+pump_body_peristaltic_rotor_width = gear_peristaltic_thickness + 2 * ( rollers_width + rollers_holder_thickness + gear_motor_bolt_width) + pump_body_base_width_clearance;
+echo(str("pump_body_peristaltic_rotor_width = ", pump_body_peristaltic_rotor_width));
+pump_body_base_width = pump_body_peristaltic_rotor_width + 2 * pump_body_lateral_thickness;
 pump_body_base_length = gear_peristaltic_pitch_diameter;
 echo(str("base_width = ", pump_body_base_width));
 echo(str("base_length = ", pump_body_base_length));
@@ -42,7 +45,19 @@ echo(str("pump_body_crossed_beam_length = ", pump_body_crossed_beam_length));
 
 pump_body_crossed_beam_thickness = pump_body_lateral_thickness;
 
+pump_body_tube_holder_height = 40;
+pump_body_tube_holder_thickness = pump_body_lateral_thickness;
+
+pump_body_tube_holder_diameter = 10;
+
 // Testing
+//color("LimeGreen") 
+//translate([0, 0, pump_body_shaft_height]) {
+//	rotate([0, 90, 0]) {
+//		gear_peristaltic();
+//	}
+//}
+
 pump_body();
 
 /* MODULES */
@@ -54,6 +69,10 @@ module pump_body(){
 			lateral();
 			mirror(1,0,0)
 				lateral();
+			tube_holder();
+			mirror([0, 1, 0]) 
+				tube_holder();
+			
 			// crossed_beam();
 			// mirror([1, 0, 0]) 
 			// 	crossed_beam();
@@ -62,8 +81,7 @@ module pump_body(){
 			// mirror([1, 0, 0]) 
 			// 	crossed_beam();
 			// }
-			
-			
+
 			//motor_screw_holder();
 			// translate([pump_body_base_width/2, 0, nema_17_height/2 + pump_body_base_thickness/2]) 
 			// cube(size=[100, nema_17_height, nema_17_height], center=true);
@@ -94,33 +112,33 @@ module base_opening(){
 			pump_body_base_thickness], center=true);
 
 		translate([pump_body_base_width/2 - nema_17_height/2 - pump_body_lateral_thickness, 0, 0]) 
-			cube(size=[pump_body_base_width/2 - gear_motor_thickness, 
-				nema_17_height, 
-				pump_body_base_thickness], center=true);
+		cube(size=[pump_body_base_width/2 - gear_motor_thickness, 
+			nema_17_height, 
+			pump_body_base_thickness], center=true);
 
 
-		}
 	}
+}
 
-	module lateral(){
-		color("Peru")
-		translate([pump_body_base_width/2, 0, pump_body_base_thickness/2]) 
-		polyhedron(
-			points=[ 	[0,-pump_body_base_length/2,0],
-			[0,0,pump_body_lateral_height],
-			[0,pump_body_base_length/2,0],
-			[-pump_body_lateral_thickness,-pump_body_base_length/2,0],
-			[-pump_body_lateral_thickness,0,pump_body_lateral_height],
-			[-pump_body_lateral_thickness,pump_body_base_length/2,0],  ],                                 
-			triangles=[ 	[0,1,2],
-			[5,4,3],
-			[2,1,4],
-			[2,4,5],
-			[0,3,4],
-			[0,4,1],
-			[0,2,5],
-			[0,5,3] ]                         
-		);
+module lateral(){
+	color("Peru")
+	translate([pump_body_base_width/2, 0, pump_body_base_thickness/2]) 
+	polyhedron(
+		points=[ 	[0,-pump_body_base_length/2,0],
+		[0,0,pump_body_lateral_height],
+		[0,pump_body_base_length/2,0],
+		[-pump_body_lateral_thickness,-pump_body_base_length/2,0],
+		[-pump_body_lateral_thickness,0,pump_body_lateral_height],
+		[-pump_body_lateral_thickness,pump_body_base_length/2,0],  ],                                 
+		triangles=[ 	[0,1,2],
+		[5,4,3],
+		[2,1,4],
+		[2,4,5],
+		[0,3,4],
+		[0,4,1],
+		[0,2,5],
+		[0,5,3] ]                         
+	);
 	//http://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#polyhedron
 }
 
@@ -207,7 +225,7 @@ module crossed_beam(){
 		pump_body_base_length/2 - pump_body_crossed_beam_thickness,
 		pump_body_base_thickness/2], // 7 done
 
-		 ],    
+		],    
 
 		triangles=[ 	
 		[0,1,2],
@@ -223,4 +241,37 @@ module crossed_beam(){
 		[4,7,6],
 		[4,6,5]]                         
 	);	
+}
+
+module tube_holder(){
+	translate([	0,
+		pump_body_base_length/2 - pump_body_tube_holder_thickness/2, 
+		pump_body_base_thickness/2 + pump_body_tube_holder_height/2]){
+		difference(){
+			cube(size=[pump_body_base_width - 2* pump_body_lateral_thickness, 
+				pump_body_tube_holder_thickness, 
+				pump_body_tube_holder_height], center=true);
+
+			tube_support_hole();
+			mirror([1, 0, 0]) 
+			tube_support_hole();
+			
+		}
+	}
+}
+
+module tube_support_hole(){
+	translate([ gear_peristaltic_thickness/2 + rollers_width/2 + gear_motor_bolt_width, 2*pump_body_tube_holder_thickness/3, 0]){
+		cylinder(r=pump_body_tube_holder_diameter/2, h=pump_body_lateral_height, center=true);	// tube support
+	tube_support_screw_hole();
+	mirror([1, 0, 0])
+		tube_support_screw_hole();
+	}
+}
+
+module tube_support_screw_hole(){
+	translate([pump_body_tube_holder_diameter, -pump_body_tube_holder_thickness/2, 0]) {
+		rotate([90, 0, 0]) 					
+			#cylinder(r=3mm_screw_radius, h=pump_body_tube_holder_thickness*2, center=true);
+	}
 }

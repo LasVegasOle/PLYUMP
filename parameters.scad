@@ -111,3 +111,5 @@ twist=200;
 
 gear_motor_bolt_width = 3;
 gear_motor_bolt_length = 5.8;
+
+3mm_screw_radius = 3.4/2;
