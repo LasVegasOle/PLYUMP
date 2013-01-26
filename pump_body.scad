@@ -59,6 +59,9 @@ pump_body_tube_holder_diameter = 10;
 //}
 
 pump_body();
+//rotate([90, 0, 0]) 
+//tube_holder_free();
+
 
 /* MODULES */
 
@@ -257,6 +260,18 @@ module tube_holder(){
 			tube_support_hole();
 			
 		}
+	}
+}
+
+module tube_holder_free(){
+		difference(){
+			cube(size=[pump_body_base_width - 2* pump_body_lateral_thickness, 
+				pump_body_tube_holder_thickness, 
+				pump_body_tube_holder_height/2], center=true);
+
+			tube_support_hole();
+			mirror([1, 0, 0]) 
+			tube_support_hole();
 	}
 }
 
