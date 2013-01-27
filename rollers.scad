@@ -8,10 +8,6 @@
 /******************************************************/
 include <parameters.scad>
 
-rollers_width = 33;
-rollers_clearance = 1;
-rollers_easy_printing_inverted_cone_thickness = 624zz_thickness;
-
 // Testing
 rollers();
 

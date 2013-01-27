@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: gear_motor.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.31                                      */
+/* version: 0.32                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info:                                              */
 /******************************************************/

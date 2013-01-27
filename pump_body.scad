@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: pump_body.scad                               */
 /* author: Luis Rodriguez                             */
-/* version: 0.31                                      */
+/* version: 0.32                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info:                                              */
 /******************************************************/
@@ -11,44 +11,30 @@ include <parameters.scad>
 use <gear_peristaltic.scad>
 
 /*Base*/
-pump_body_base_thickness = 10;
+pump_body_base_thickness = 7;
 pump_body_lateral_thickness = pump_body_base_thickness ;//* 2; 
-pump_body_base_width_clearance = 10;
+pump_body_base_width_clearance = 3;
 pump_body_peristaltic_rotor_width = gear_peristaltic_thickness + 2 * ( rollers_width + rollers_holder_thickness + gear_motor_bolt_width) + pump_body_base_width_clearance;
-echo(str("pump_body_peristaltic_rotor_width = ", pump_body_peristaltic_rotor_width));
-pump_body_base_width = pump_body_peristaltic_rotor_width + 2 * pump_body_lateral_thickness;
-pump_body_base_length = gear_peristaltic_pitch_diameter;
-echo(str("base_width = ", pump_body_base_width));
-echo(str("base_length = ", pump_body_base_length));
 
-pump_body_motor_holder_length = 4;
-pump_body_motor_holder_width = 4;
+// Pump body peristaltic part dimensions
+pump_body_cavity_exterior_radius = rollers_exterior_radius + pinched_tube + pump_body_lateral_thickness;
+echo(str("pump_body_cavity_exterior_radius = ", pump_body_cavity_exterior_radius));
+pump_body_cavity_exterior_height = pump_body_base_thickness + rollers_width + rollers_holder_thickness + 3 * gear_motor_bolt_width ;
 
-pump_body_shaft_height = nema_17_height + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance;
-echo(str("Pump body shaft height = ", pump_body_shaft_height));
+pump_body_cavity_interior_radius = rollers_exterior_radius + pinched_tube;
+echo(str("pump_body_cavity_interior_radius = ", pump_body_cavity_interior_radius));
+pump_body_cavity_interior_height = rollers_width + rollers_holder_thickness + 3 * gear_motor_bolt_width + pump_body_base_thickness;
 
-pump_body_lateral_height = pump_body_shaft_height + 608zz_outside_diameter*3/2;
-echo(str("Lateral height = ", pump_body_lateral_height));
+// Pump body gear part dimensions
+pump_body_gear_cavity_interior_radius = gear_peristaltic_outside_radius + pump_body_base_width_clearance;
+echo(str("pump_body_gear_cavity_interior_radius = ", pump_body_gear_cavity_interior_radius));
+pump_body_gear_cavity_interior_height = gear_peristaltic_thickness/2 + pump_body_base_width_clearance;
 
-pump_body_lateral_opening_height = pump_body_shaft_height;
+pump_body_gear_cavity_exterior_radius = gear_peristaltic_outside_radius + pump_body_lateral_thickness + pump_body_base_width_clearance;
+echo(str("pump_body_gear_cavity_exterior_radius = ", pump_body_gear_cavity_exterior_radius));
+pump_body_gear_cavity_exterior_height = gear_peristaltic_thickness/2 + pump_body_base_width_clearance + pump_body_lateral_thickness;
 
-pump_body_lateral_base_angle = atan( pump_body_lateral_height / (pump_body_base_length/2) );
-echo(str("Lateral base angle = ", pump_body_lateral_base_angle));
 
-pump_body_lateral_side_lenght = pump_body_lateral_height / sin(pump_body_lateral_base_angle);
-echo(str("Lateral side lenght = ", pump_body_lateral_side_lenght));
-
-pump_body_crossed_beam_height = ( pump_body_lateral_side_lenght/2 * sin(pump_body_lateral_base_angle) )/2;
-echo(str("pump_body_crossed_beam_height = ", pump_body_crossed_beam_height));
-pump_body_crossed_beam_length = ( pump_body_lateral_side_lenght/2 * cos(pump_body_lateral_base_angle) )/2;
-echo(str("pump_body_crossed_beam_length = ", pump_body_crossed_beam_length));
-
-pump_body_crossed_beam_thickness = pump_body_lateral_thickness;
-
-pump_body_tube_holder_height = 40;
-pump_body_tube_holder_thickness = pump_body_lateral_thickness;
-
-pump_body_tube_holder_diameter = 10;
 
 // Testing
 //color("LimeGreen") 
@@ -68,225 +54,98 @@ pump_body();
 module pump_body(){
 	difference(){
 		union(){ // Add
-			base();
-			lateral();
-			mirror(1,0,0)
-				lateral();
-			tube_holder();
-			mirror([0, 1, 0]) 
-				tube_holder();
-			
-			// crossed_beam();
-			// mirror([1, 0, 0]) 
-			// 	crossed_beam();
-			// mirror([0, 1, 0]) {
-			// 	crossed_beam();
-			// mirror([1, 0, 0]) 
-			// 	crossed_beam();
-			// }
-
-			//motor_screw_holder();
-			// translate([pump_body_base_width/2, 0, nema_17_height/2 + pump_body_base_thickness/2]) 
-			// cube(size=[100, nema_17_height, nema_17_height], center=true);
+			peristaltic_cavity_exterior();
+			gear_cavity_exterior();
+			easy_printing_transition();
 		}
 		union(){ // Subtract
-			base_opening();
-			lateral_opening();
-			pump_body_shaft();
-			pump_body_bearings();
-			mirror(){
-				pump_body_bearings();
-				lateral_opening();
-			}
+			peristaltic_cavity_interior();
+			gear_cavity_interior();
+			central_bearing_shaft();
+			screw_holders();
 		}
 	}
 }
 
-module base(){
-	color("Cyan")
-	cube(size=[pump_body_base_width, pump_body_base_length, pump_body_base_thickness], center=true);
-}
-
-module base_opening(){
-	color("Orange")
-	difference(){
-		cube(size=[pump_body_base_width - pump_body_lateral_thickness * 2 , 
-			pump_body_base_length - pump_body_lateral_thickness * 2, 
-			pump_body_base_thickness], center=true);
-
-		translate([pump_body_base_width/2 - nema_17_height/2 - pump_body_lateral_thickness, 0, 0]) 
-		cube(size=[pump_body_base_width/2 - gear_motor_thickness, 
-			nema_17_height, 
-			pump_body_base_thickness], center=true);
-
-
-	}
-}
-
-module lateral(){
-	color("Peru")
-	translate([pump_body_base_width/2, 0, pump_body_base_thickness/2]) 
-	polyhedron(
-		points=[ 	[0,-pump_body_base_length/2,0],
-		[0,0,pump_body_lateral_height],
-		[0,pump_body_base_length/2,0],
-		[-pump_body_lateral_thickness,-pump_body_base_length/2,0],
-		[-pump_body_lateral_thickness,0,pump_body_lateral_height],
-		[-pump_body_lateral_thickness,pump_body_base_length/2,0],  ],                                 
-		triangles=[ 	[0,1,2],
-		[5,4,3],
-		[2,1,4],
-		[2,4,5],
-		[0,3,4],
-		[0,4,1],
-		[0,2,5],
-		[0,5,3] ]                         
-	);
-	//http://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#polyhedron
-}
-
-module motor_screw_holder(){
-	color("Green")
-	translate([gear_motor_thickness - pump_body_motor_holder_width/2, 
-		- pump_body_motor_holder_length/2, 
-		nema_17_height/4 + pump_body_base_thickness/2])
-	cube(size=[pump_body_motor_holder_width, pump_body_motor_holder_length, nema_17_height/2], center=true);
+module peristaltic_cavity_exterior(){
+	color("LimeGreen")
+	lateral_shape(r = pump_body_cavity_exterior_radius, h = pump_body_cavity_exterior_height);
 
 }
 
-module pump_body_shaft(){
+module gear_cavity_exterior(){
 	color("Indigo")
-	translate([0, 0, pump_body_shaft_height + pump_body_base_thickness / 2])
-	rotate([0, 90, 0]) 	
-	cylinder(r=608zz_inside_diameter/2 + bearings_clearance * 4, h=pump_body_base_width*2, center=true);
+	translate([0, 0, pump_body_cavity_exterior_height/2 + pump_body_gear_cavity_exterior_height/2]) 
+	lateral_shape( r = pump_body_gear_cavity_exterior_radius, h = pump_body_gear_cavity_exterior_height );
 }
 
-module pump_body_bearings(){
-	color("SpringGreen")
-	translate([	pump_body_base_width/2 - 608zz_thickness, 0, 
-		pump_body_shaft_height + pump_body_base_thickness / 2])
-	rotate([0, 90, 0]) 	
-	cylinder(r=( 608zz_outside_diameter+ bearings_clearance)/2 , h=608zz_thickness, center=true);
+module peristaltic_cavity_interior(){
+	color("Green")
+	translate([0, 0, pump_body_base_thickness/2 + pump_body_base_thickness/2]) 
+	lateral_shape(r = pump_body_cavity_interior_radius, h = pump_body_cavity_interior_height);
+
 }
 
-module lateral_opening(){
+module gear_cavity_interior(){
+	color("Purple")
+	translate([0, 0, pump_body_cavity_exterior_height/2 + pump_body_gear_cavity_exterior_height/2 + pump_body_base_thickness/2]) 
+	lateral_shape( r = pump_body_gear_cavity_interior_radius, h = pump_body_gear_cavity_interior_height );
+}
+
+module central_bearing_shaft(){
+	color("Peru")
+	cylinder(r = (608zz_inside_diameter+bearings_clearance)/2, h = pump_body_base_thickness * 8 , center=true);
+}
+
+
+/* WARNING~~~ this module is d************rty as heeeeeeeeeeell loco*/
+module easy_printing_transition(r = pump_body_cavity_exterior_radius -1,
+								bt = 2*pump_body_base_thickness+1,
+								lt = 2*pump_body_lateral_thickness ){
 	color("Red")
-	translate([pump_body_base_width/2, 0, pump_body_base_thickness/2]) 
-	polyhedron(
-		points=[ 	[0,-pump_body_base_length/2 + pump_body_lateral_thickness, 0],
-		[ 0, 0, pump_body_lateral_opening_height],
-		[0,pump_body_base_length/2 - pump_body_lateral_thickness,0],
-		[-pump_body_lateral_thickness,-pump_body_base_length/2 + pump_body_lateral_thickness,0],
-		[-pump_body_lateral_thickness,0, pump_body_lateral_opening_height],
-		[-pump_body_lateral_thickness,pump_body_base_length/2 - pump_body_lateral_thickness,0],  ],                                 
-		triangles=[ 	
-		[0,1,2],
-		[5,4,3],
-		[2,1,4],
-		[2,4,5],
-		[0,3,4],
-		[0,4,1],
-		[0,2,5],
-		[0,5,3] ]                         
-	);
-}
-
-module crossed_beam(){
-	color("RosyBrown")
-	polyhedron(
-		points=[ 	
-
-		[pump_body_base_width/2 - pump_body_lateral_thickness, 
-		pump_body_base_length/2 - pump_body_crossed_beam_length, 
-		pump_body_crossed_beam_height + pump_body_base_thickness/2], // 0 done
-
-		[pump_body_base_width/2 - pump_body_lateral_thickness,
-		pump_body_base_length/2 - pump_body_crossed_beam_length, 
-		pump_body_crossed_beam_height + pump_body_base_thickness/2 + pump_body_crossed_beam_thickness], // 1
-
-		[-pump_body_base_width/2 + pump_body_lateral_thickness,
-		pump_body_base_length/2,
-		pump_body_base_thickness/2], //2 done
-
-		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_crossed_beam_thickness,
-		pump_body_base_length/2,
-		pump_body_base_thickness/2], // 3 done
-
-		[pump_body_base_width/2 - pump_body_lateral_thickness,
-		pump_body_base_length/2 - pump_body_crossed_beam_length - pump_body_crossed_beam_thickness,
-		pump_body_crossed_beam_height], // 4
-
-		[pump_body_base_width/2 - pump_body_lateral_thickness,
-		pump_body_base_length/2 - pump_body_crossed_beam_length - pump_body_crossed_beam_thickness,
-		pump_body_crossed_beam_height + pump_body_crossed_beam_thickness],// 5
-
-		[-pump_body_base_width/2 + pump_body_lateral_thickness,
-		pump_body_base_length/2 - pump_body_crossed_beam_thickness,
-		pump_body_base_thickness/2], // 6 done
-
-		[-pump_body_base_width/2 + pump_body_lateral_thickness + pump_body_crossed_beam_thickness,
-		pump_body_base_length/2 - pump_body_crossed_beam_thickness,
-		pump_body_base_thickness/2], // 7 done
-
-		],    
-
-		triangles=[ 	
-		[0,1,2],
-		[0,2,3],
-		[0,4,5],
-		[0,5,1],
-		[3,2,7],
-		[7,2,6],
-		[7,4,0],
-		[0,3,7],
-		[2,1,5],
-		[5,6,2],
-		[4,7,6],
-		[4,6,5]]                         
-	);	
-}
-
-module tube_holder(){
-	translate([	0,
-		pump_body_base_length/2 - pump_body_tube_holder_thickness/2, 
-		pump_body_base_thickness/2 + pump_body_tube_holder_height/2]){
+	translate([0, 0, pump_body_cavity_exterior_height/2 +1]) 
+	union(){
 		difference(){
-			cube(size=[pump_body_base_width - 2* pump_body_lateral_thickness, 
-				pump_body_tube_holder_thickness, 
-				pump_body_tube_holder_height], center=true);
+			rotate_extrude(convexity = 10, $fn = birthday_day)
+			translate([r, 0, 0])
+			polygon(points=[[0,0],[bt,0],[0,-2*lt]], paths=[[0,1,2]]);
+			translate([0, r/2 + lt/2, -bt/2]) 
+			cube(size=[r*4, r + lt, lt*4], center=true);
+		}	
 
-			tube_support_hole();
-			mirror([1, 0, 0]) 
-			tube_support_hole();
-			
+		translate([r, 0, 0])
+		rotate([270,0,0])
+		linear_extrude( height = 608zz_outside_diameter , $fn = birthday_day)
+		polygon(points=[[0,0],[bt,0],[0,2*lt]], paths=[[0,1,2]]);
+
+		mirror([1, 0, 0]) {
+
+			translate([r, 0, 0])
+			rotate([270,0,0])
+			linear_extrude( height = 608zz_outside_diameter , $fn = birthday_day) 
+			polygon(points=[[0,0],[bt,0],[0,2*lt]], paths=[[0,1,2]]);
+
 		}
 	}
+
 }
 
-module tube_holder_free(){
+module lateral_shape(r = 10, h = 5, square_length = 608zz_outside_diameter){
+	union(){
 		difference(){
-			cube(size=[pump_body_base_width - 2* pump_body_lateral_thickness, 
-				pump_body_tube_holder_thickness, 
-				pump_body_tube_holder_height/2], center=true);
-
-			tube_support_hole();
-			mirror([1, 0, 0]) 
-			tube_support_hole();
+			cylinder(r=r, h=h, center=true);
+			translate([0, r/2, 0]) 
+			cube(size=[r*4, r, h], center=true);
+		}
+		translate([0, square_length/2, 0])cube(size=[r*2, square_length, h], center=true);
 	}
 }
 
-module tube_support_hole(){
-	translate([ gear_peristaltic_thickness/2 + rollers_width/2 + gear_motor_bolt_width, 2*pump_body_tube_holder_thickness/3, 0]){
-		cylinder(r=pump_body_tube_holder_diameter/2, h=pump_body_lateral_height, center=true);	// tube support
-	tube_support_screw_hole();
-	mirror([1, 0, 0])
-		tube_support_screw_hole();
-	}
-}
-
-module tube_support_screw_hole(){
-	translate([pump_body_tube_holder_diameter, -pump_body_tube_holder_thickness/2, 0]) {
-		rotate([90, 0, 0]) 					
-			#cylinder(r=3mm_screw_radius, h=pump_body_tube_holder_thickness*2, center=true);
+module screw_holders(){
+	for ( i = [ 1 : rollers_number ] ) {
+		translate( [ (pump_body_gear_cavity_interior_radius + pump_body_lateral_thickness/2) * cos( rollers_angle * i ), 
+			(pump_body_gear_cavity_interior_radius + pump_body_lateral_thickness/2) * sin( rollers_angle * i ),  
+			0])
+		cylinder( r = 3mm_screw_radius , h = 608zz_thickness*20, $fn = birthday_day , center=true);
 	}
 }
