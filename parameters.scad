@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: parameters.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.32                                      */
+/* version: 0.34                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info: This file contains all the shared parameters */
 /******************************************************/
@@ -60,6 +60,11 @@ echo(str("Rollers position radius = ", rollers_position_minimum_radius ) );
 rollers_exterior_radius = rollers_position_minimum_radius + rollers_radius;
 echo(str("Rollers exterior radius = ", rollers_exterior_radius ) );
 
+/* Base */
+
+pump_body_lateral_thickness = 8;
+pinched_tube = 2.4;
+
 /* Gears */
 // Common
 gear_ratio = 3;
@@ -70,7 +75,7 @@ gear_peristaltic_thickness = 608zz_thickness * 2; // "*2" due to herringbone!
 // Circular pitch is calculate through pitch radius for peristaltic and motor gear
 // in order to avoid rollers crashing nema 17 motor
 //
-// 		nema_17_height + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance = 
+// 		nema_17_height/2 + rollers_position_minimum_radius + rollers_radius + pinched_tube + pump_body_lateral_thickness = 
 // 		gear_peristaltic_pitch_radius + gear_motor_pitch_radius
 //
 //		gear_peristaltic_pitch_radius + gear_motor_pitch_radius =
@@ -78,13 +83,13 @@ gear_peristaltic_thickness = 608zz_thickness * 2; // "*2" due to herringbone!
 //		(gear_peristaltic_teeth + gear_motor_teeth)/360 * circular_pitch
 //
 //		circular_pitch = 
-//		360*(nema_17_height + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance) /
+//		360*(nema_17_height/2 + rollers_position_minimum_radius + rollers_radius + + pinched_tube + pump_body_lateral_thickness) /
 //		(gear_peristaltic_teeth + gear_motor_teeth)	
 
 //circular_pitch = 360*gear_peristaltic_radius/gear_peristaltic_teeth;
-circular_pitch = 360 * (nema_17_height/2 + rollers_position_minimum_radius + rollers_radius + nema_rollers_clearance) /
+circular_pitch = 360 * (nema_17_height/2 + rollers_position_minimum_radius + rollers_radius + pinched_tube + pump_body_lateral_thickness) /
 		(gear_peristaltic_teeth + gear_motor_teeth);
-
+echo(str("circular_pitch = ", circular_pitch));
 // Pitch diameter: Diameter of pitch circle.
 gear_peristaltic_pitch_diameter = gear_peristaltic_teeth * circular_pitch / 180;
 gear_peristaltic_pitch_radius = gear_peristaltic_pitch_diameter/2;
@@ -122,5 +127,3 @@ gear_motor_bolt_width = 3;
 gear_motor_bolt_length = 5.8;
 
 3mm_screw_radius = 3.4/2;
-
-pinched_tube = 3;

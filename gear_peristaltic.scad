@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: gear_peristaltic.scad                        */
 /* author: Luis Rodriguez                             */
-/* version: 0.32                                      */
+/* version: 0.34                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info:                                              */
 /******************************************************/
