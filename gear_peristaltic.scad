@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: gear_peristaltic.scad                        */
 /* author: Luis Rodriguez                             */
-/* version: 0.34                                      */
+/* version: 0.35                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info:                                              */
 /******************************************************/
@@ -25,6 +25,9 @@ module gear_peristaltic(){
 		union(){ // Substract
 			central_bearings();
 			rollers_shafts();
+			rotate([0, 0, 90]) 
+			rollers_shafts();
+			circles();
 		}
 	}
 }
@@ -51,4 +54,13 @@ module rollers_shafts(){
 			0])
 		cylinder( r = rollers_shaft_diameter/2 , h = 608zz_thickness*4, $fn = birthday_day , center=true);
 	}
+}
+
+module circles(){
+	for ( i = [ 1 : rollers_number*2 ] ) {
+		translate( [ ( rollers_position_minimum_radius + (gear_peristaltic_pitch_radius-rollers_position_minimum_radius)/2 ) * cos( rollers_angle/2 * i ), 
+			( rollers_position_minimum_radius + (gear_peristaltic_pitch_radius-rollers_position_minimum_radius)/2 ) * sin( rollers_angle/2 * i ),  
+			0])
+		cylinder( r = 5 , h = 608zz_thickness*4, $fn = birthday_day , center=true);
+	}	
 }

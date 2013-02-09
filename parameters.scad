@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: parameters.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.34                                      */
+/* version: 0.35                                      */
 /* w3b: tiny.cc/lyu                                   */
 /* info: This file contains all the shared parameters */
 /******************************************************/
@@ -27,12 +27,14 @@ nema_17_screw_distance = 31.04;
 nema_rollers_clearance = 3;
 
 /* ROLLERS */
-rollers_number = 6;
-rollers_clearance = 4;
-rollers_angle = 360 / ( rollers_number );
+rollers_number_total = 12;
+rollers_number = rollers_number_total / 2;
 rollers_wall = 0;
 rollers_diameter = 624zz_outside_diameter + rollers_wall * 2;
 rollers_radius = rollers_diameter / 2;
+rollers_clearance = rollers_diameter;
+rollers_angle = 360 / ( rollers_number );
+
 rollers_shaft_diameter = 624zz_inside_diameter + bearings_clearance;
 rollers_bearings_contacts_thickness = 2;
 rollers_bearings_contacts_height = 3;

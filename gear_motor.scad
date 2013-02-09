@@ -25,7 +25,7 @@ module gear_motor(){
 		}
 		union(){ // Substract
 			gear_motor_shaft();
-			#gear_motor_screw_holder();
+			gear_motor_screw_holder();
 		}
 	}
 }
