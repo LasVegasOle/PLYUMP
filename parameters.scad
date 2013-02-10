@@ -39,7 +39,7 @@ rollers_shaft_diameter = 624zz_inside_diameter + bearings_clearance;
 rollers_bearings_contacts_thickness = 2;
 rollers_bearings_contacts_height = 3;
 
-rollers_width = 624zz_thickness * 5;
+rollers_width = 624zz_thickness * 9;
 rollers_easy_printing_inverted_cone_thickness = 624zz_thickness;
 
 rollers_holder_thickness = 624zz_thickness/2;
@@ -64,7 +64,7 @@ echo(str("Rollers exterior radius = ", rollers_exterior_radius ) );
 
 /* Base */
 
-pump_body_lateral_thickness = 8;
+pump_body_lateral_thickness = 9;
 pinched_tube = 2.4;
 
 /* Gears */
@@ -128,4 +128,7 @@ twist=200;
 gear_motor_bolt_width = 3;
 gear_motor_bolt_length = 5.8;
 
+// this includes tolerance 4 ma printa!
 3mm_screw_radius = 3.4/2;
+4mm_screw_radius = 5/2;
+4mm_screw_head_radius = 7 / 2;

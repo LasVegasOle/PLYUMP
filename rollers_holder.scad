@@ -1,6 +1,6 @@
 /******************************************************/
 /* PLYUMP                                             */
-/* file: rollers_holder.scad                         */
+/* file: rollers_holder.scad                          */
 /* author: Luis Rodriguez                             */
 /* version: 0.35                                      */
 /* w3b: tiny.cc/lyu                                   */
