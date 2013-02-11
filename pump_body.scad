@@ -64,13 +64,6 @@ module pump_body(){
 			mirror([0, 1, 0])
 			cartridges_screws();
 
-
-			//lateral_walls_art();
-			lateral_void();
-			mirror([1, 0, 0]) 
-			lateral_void();
-			//lateral_walls_art();
-
 		}
 	}
 }
