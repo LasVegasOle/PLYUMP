@@ -130,6 +130,6 @@ gear_motor_bolt_length = 5.8;
 
 // this includes tolerance 4 ma printa!
 3mm_screw_radius = 3.4/2;
-3mm_tight_screw_radius = 3/2;
+3mm_tight_screw_radius = 3.2/2;
 4mm_screw_radius = 5/2;
 4mm_screw_head_radius = 7 / 2;

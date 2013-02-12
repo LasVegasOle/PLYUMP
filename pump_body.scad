@@ -38,11 +38,11 @@ pump_body_lateral_screws_offset = 17;
 pump_body_cartridges_offset = (rollers_width - 4mm_screw_radius) / 3;
 echo(str("pump_body_cartridges_offset = ", pump_body_cartridges_offset));
 
-//rotate([0, -90, 0])
-//lateral();
-//rotate([90, 0, 0])
-//front();
-motor_holder();
+// rotate([0, -90, 0])
+// lateral();
+rotate([90, 0, 90])
+front();
+// motor_holder();
 
 module motor_holder(){
 	difference(){
@@ -61,7 +61,7 @@ module motor_holder(){
 
 module motor_holder_hole(){
 	cube(size=[pump_body_motor_support_width - 2*pump_body_lateral_thickness, 
-		nema_17_height - 2*pump_body_lateral_thickness, 
+		nema_17_height - 2*pump_body_lateral_thickness + gear_motor_bolt_width, 
 		pump_body_base_thickness*2], center=true);
 }
 
