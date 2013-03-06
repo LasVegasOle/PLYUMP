@@ -22,6 +22,7 @@ bearings_clearance = 0.5; 	// Used to "easily fit bearings into their holes"
 624zz_thickness = 5;
 
 /* NEMA 17 */
+nema_17_length = 47.5;
 nema_17_height = 42.2;
 nema_17_screw_distance = 31.04;
 nema_rollers_clearance = 3;

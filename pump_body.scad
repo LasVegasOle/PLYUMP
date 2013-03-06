@@ -30,19 +30,21 @@ pump_body_int_length = pump_body_length - 2*pump_body_lateral_thickness;
 
 pump_body_motor_support_width = (pump_body_int_width - gear_peristaltic_thickness) / 2 - gear_motor_neck_height;
 echo(str("pump_body_motor_support_width = ", pump_body_motor_support_width));
-motor_wall_support_lenght = 10;
+motor_wall_support_lenght = 9;
 motor_wall_support_height = nema_17_height + pump_body_base_thickness;
-motor_holder_thickness = 5;
+motor_holder_thickness = 7;
 
 pump_body_lateral_screws_offset = 17;
 pump_body_cartridges_offset = (rollers_width - 4mm_screw_radius) / 3;
 echo(str("pump_body_cartridges_offset = ", pump_body_cartridges_offset));
 
+motor_floor_offset = 2.4;
+
 // rotate([0, -90, 0])
 // lateral();
 rotate([90, 0, 90])
 front();
-// motor_holder();
+//motor_holder();
 
 module motor_holder(){
 	difference(){
@@ -55,8 +57,16 @@ module motor_holder(){
 		union(){
 			motor_lateral_screws();
 			motor_holder_hole();
+			#motor_nema_base();
 		}
 	}
+}
+
+module motor_nema_base(){
+	translate([- (pump_body_motor_support_width - 2*pump_body_lateral_thickness) + nema_17_length , 
+		0, 
+		motor_floor_offset])
+	cube(size=[nema_17_length, nema_17_height, pump_body_base_thickness], center=true);
 }
 
 module motor_holder_hole(){
@@ -86,21 +96,21 @@ module motor_wall_support(){
 			motor_wall_support_height], center=true);
 	}
 	union(){
-		motor_holder_screws();
+		#motor_holder_screws();
 	}
 }
 }
 
 module motor_holder_screws(){
 		translate([(pump_body_motor_support_width + motor_holder_thickness)/2 , 
-			( -motor_wall_support_lenght + nema_17_height ) / 2, 
-			(nema_17_height - nema_17_screw_distance + pump_body_base_thickness) / 2]) 
+			 -(nema_17_height - nema_17_screw_distance)/2 + nema_17_height/2, 
+			(nema_17_height - nema_17_screw_distance ) / 2 + motor_floor_offset]) 
 		rotate([0, 90, 0])
 		cylinder(r=3mm_screw_radius, h=10, center=true);
 
 		translate([(pump_body_motor_support_width + motor_holder_thickness)/2 , 
-			( -motor_wall_support_lenght + nema_17_height ) / 2, 
-			(nema_17_height - nema_17_screw_distance + pump_body_base_thickness) / 2 + nema_17_screw_distance]) 
+			-(nema_17_height - nema_17_screw_distance)/2 + nema_17_height/2, 
+			(nema_17_height - nema_17_screw_distance ) / 2 + nema_17_screw_distance + motor_floor_offset]) 
 		rotate([0, 90, 0])
 		cylinder(r=3mm_screw_radius, h=10, center=true);
 }
@@ -135,7 +145,7 @@ module motor_lateral_screws(){
 
 module front_hole(){
 	translate([0, 0, -pump_body_height/8])
-	#cube(size=[pump_body_width -4*pump_body_lateral_thickness, pump_body_lateral_thickness*2, 
+	cube(size=[pump_body_width -4*pump_body_lateral_thickness, pump_body_lateral_thickness*2, 
 		3*pump_body_height/4], center=true);
 }
 
@@ -149,7 +159,7 @@ module lateral(){
 		union(){
 			bearing_hole();	
 			lateral_center_hole();
-			#lateral_screws();
+			lateral_screws();
 			translate([20, 0, (pump_body_base_thickness-pump_body_height)/2]) // guarrada
 			motor_lateral_screws();
 		}
@@ -191,7 +201,7 @@ module bearing_support(){
 }
 
 module bearing_hole(){
-	translate([ 0, 0, pump_body_shaft_height/2])
+	#translate([ 0, 0, pump_body_shaft_height/2])
 			rotate([0, 90, 0])
 				union(){
 					//central shaft
@@ -199,7 +209,7 @@ module bearing_hole(){
 						h=rollers_holder_thickness + rollers_holder_central_bearing_support_height * 2, center=true);
 					// bearing hole
 					translate([0, 0, pump_body_lateral_thickness/2 - 608zz_thickness/2])
-					#cylinder(r=608zz_outside_diameter/2 + bearings_clearance/2, 
+					cylinder(r=608zz_outside_diameter/2 + bearings_clearance/2, 
 						h=608zz_thickness, center=true);	
 				}
 }
