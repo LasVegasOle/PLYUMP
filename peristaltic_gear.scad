@@ -18,14 +18,13 @@ gear_peristaltic();
 module gear_peristaltic(){
 	difference(){
 		union(){ // Add
-			half_gear_peristaltic();
+			half_up_gear_peristaltic();
 			mirror([0,0,1])
-			half_gear_peristaltic();
+			half_down_gear_peristaltic();
 		}
 		union(){ // Substract
 			central_bearings();
-			rollers_shafts();
-			rotate([0, 0, 90]) 
+			central_shaft();
 			rollers_shafts();
 			circles();
 		}
@@ -33,7 +32,16 @@ module gear_peristaltic(){
 }
 
 // Half herringbone peristaltic gear
-module half_gear_peristaltic(){
+module half_up_gear_peristaltic(){
+	gear (number_of_teeth=gear_peristaltic_teeth,
+		circular_pitch=circular_pitch,
+		pressure_angle=pressure_angle,
+		gear_thickness = gear_peristaltic_thickness/4,
+		rim_thickness = gear_peristaltic_thickness/2,
+		hub_thickness = 0,
+		twist=twist/gear_peristaltic_teeth);
+}
+module half_down_gear_peristaltic(){
 	gear (number_of_teeth=gear_peristaltic_teeth,
 		circular_pitch=circular_pitch,
 		pressure_angle=pressure_angle,
@@ -44,7 +52,13 @@ module half_gear_peristaltic(){
 }
 
 module central_bearings(){
-	cylinder(r=(608zz_outside_diameter+bearings_clearance)/2, h=608zz_thickness*4, $fn = birthday_day, center=true);
+	translate([0, 0, gear_peristaltic_thickness/2 - 608zz_thickness]) 
+		#cylinder(r=(608zz_outside_diameter+bearings_clearance)/2, h=608zz_thickness, $fn = birthday_day, center=true);
+}
+
+module central_shaft(){
+	translate([0, 0, gear_peristaltic_thickness/2 - 608zz_thickness]) 
+		#cylinder(r=608zz_inside_diameter/2 + bearings_clearance, h=608zz_thickness*10, $fn = birthday_day, center=true);
 }
 
 module rollers_shafts(){
