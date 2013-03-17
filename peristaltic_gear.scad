@@ -1,18 +1,21 @@
 /******************************************************/
 /* PLYUMP                                             */
-/* file: gear_peristaltic.scad                        */
+/* file: peristaltic_gear.scad                        */
 /* author: Luis Rodriguez                             */
-/* version: 0.35                                      */
-/* w3b: tiny.cc/lyu                                   */
+/* version: 0.4                                       */
+/* w3b: http://lyulyulyulyu.tumblr.com                */
 /* info:                                              */
 /******************************************************/
 
 include <parameters.scad>
 use <involute_gears.scad>
+use <motor_gear.scad>
 
 // Testing
 gear_peristaltic();
-
+// translate([gear_peristaltic_outside_radius + gear_motor_outside_radius, 0, 0]) {
+// 	gear_motor();
+// }
 /* MODULES */
 
 module gear_peristaltic(){
@@ -26,7 +29,7 @@ module gear_peristaltic(){
 			central_bearings();
 			central_shaft();
 			rollers_shafts();
-			circles();
+			//circles();
 		}
 	}
 }
@@ -63,8 +66,8 @@ module central_shaft(){
 
 module rollers_shafts(){
 	for ( i = [ 1 : rollers_number ] ) {
-		translate( [ rollers_position_minimum_radius * cos( rollers_angle * i ), 
-			rollers_position_minimum_radius * sin( rollers_angle * i ),  
+		translate( [ rollers_position_radius * cos( rollers_angle * i ), 
+			rollers_position_radius * sin( rollers_angle * i ),  
 			0])
 		cylinder( r = rollers_shaft_diameter/2 , h = 608zz_thickness*4, $fn = birthday_day , center=true);
 	}

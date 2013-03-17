@@ -1,9 +1,9 @@
 /******************************************************/
 /* PLYUMP                                             */
-/* file: gear_motor.scad                              */
+/* file: motor_gear.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.34                                      */
-/* w3b: tiny.cc/lyu                                   */
+/* version: 0.4                                       */
+/* w3b: http://lyulyulyulyu.tumblr.com                */
 /* info:                                              */
 /******************************************************/
 
@@ -49,23 +49,24 @@ module gear_motor_neck(){
 }
 
 module gear_motor_shaft(){
-		cylinder( r = gear_motor_shaft_diameter / 2,  
-			h = ( gear_motor_thickness + gear_motor_neck_height ) * 3, 
+	translate([0, 0, gear_motor_neck_height]) 
+		#cylinder( r = gear_motor_shaft_diameter / 2,  
+			h = ( gear_motor_thickness + gear_motor_neck_height ) , 
 			$fn = birthday_day,
 			center=true);
 }
 
 module gear_motor_screw_holder(){
 		// Screw hole
-		translate([0, gear_motor_thickness/2, gear_motor_neck_height/2 + gear_motor_thickness/2 ] ) {
+		translate([0, gear_motor_thickness/2, gear_motor_neck_height ] ) {
 			rotate([90, 0, 0]) {
-				cylinder( r = 3.4 / 2,  
+				cylinder( r = 3.2 / 2,  
 					h =  gear_motor_neck_diameter/2 + gear_motor_shaft_diameter , $fn = birthday_day,
 					center=true);
 			}	
 		}
-		// Bolt hole
-		translate([0, gear_motor_neck_diameter/2 / (1.65) , gear_motor_thickness + gear_motor_neck_height/4 ]) {
-			cube(size=[gear_motor_bolt_length, gear_motor_bolt_width, gear_motor_thickness ], center=true);	
-		}
+		// // Bolt hole
+		// translate([0, gear_motor_neck_diameter/2 / (1.65) , gear_motor_thickness + gear_motor_neck_height ]) {
+		// 	cube(size=[gear_motor_bolt_length, gear_motor_bolt_width, gear_motor_thickness ], center=true);	
+		// }
 }

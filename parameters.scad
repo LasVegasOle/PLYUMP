@@ -2,8 +2,8 @@
 /* PLYUMP                                             */
 /* file: parameters.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.35                                      */
-/* w3b: tiny.cc/lyu                                   */
+/* version: 0.4                                       */
+/* w3b: http://lyulyulyulyu.tumblr.com                */
 /* info: This file contains all the shared parameters */
 /******************************************************/
 
@@ -47,28 +47,32 @@ rollers_holder_thickness = 624zz_thickness/2;
 rollers_holder_central_bearing_support_thickness = 3;
 rollers_holder_central_bearing_support_height = 624zz_thickness;
 
-rollers_radius_plus_clearance = rollers_radius + rollers_clearance / 2;
-rollers_position_minimum_radius_minus_roller_radius = ( rollers_radius_plus_clearance - sin( rollers_angle / 2 ) 
-	* rollers_radius_plus_clearance ) / sin( rollers_angle / 2 ) ;
+//
+roller_interior_angle = ( 180 - rollers_angle ) / 2;
+echo(str("roller_interior_angle = ", roller_interior_angle));
 
-if ( rollers_position_minimum_radius_minus_roller_radius < 608zz_inside_diameter) {
+roller_inbetween_distance = 1.7 * rollers_diameter; // 1.5 is the oversized distance!
+echo(str("roller_inbetween_distance = ", roller_inbetween_distance));
+roller_radious_triangle_rectangle_height = roller_inbetween_distance * sin (roller_interior_angle);
+echo(str("roller_radious_triangle_rectangle_height = ", roller_radious_triangle_rectangle_height));
 
-	echo(str(" THE ROLLERS WILL CRASH THE CENTRAL SHAFT, change the rollers_position_minimum_radius; " ) );
-}
+rollers_position_radius = roller_radious_triangle_rectangle_height / sin(rollers_angle);
+echo(str("rollers_position_radius = ", rollers_position_radius));
 
-rollers_position_minimum_radius = 608zz_inside_diameter + rollers_radius;
-//rollers_position_minimum_radius = rollers_position_minimum_radius_minus_roller_radius + rollers_radius;
-echo(str("Rollers position radius = ", rollers_position_minimum_radius ) );
 
-rollers_exterior_radius = rollers_position_minimum_radius + rollers_radius;
-echo(str("Rollers exterior radius = ", rollers_exterior_radius ) );
+//
+//
+//
+
+
 
 /* Base */
 
-pump_body_lateral_thickness = 9;
 pinched_tube = 2.4;
 pump_body_wall_thickness = 10;
 
+pump_body_interior_wall_radius = rollers_position_radius + pinched_tube + rollers_radius; 
+echo(str("pump_body_interior_wall_radius = ", pump_body_interior_wall_radius));
 
 /* Gears */
 // Common
@@ -115,9 +119,8 @@ gear_peristaltic_addendum = 1/gear_peristaltic_pitch_diametrial;
 gear_peristaltic_outside_radius = gear_peristaltic_pitch_radius+gear_peristaltic_addendum;
 echo(str("Outside radius gear peristaltic= ",gear_peristaltic_outside_radius));
 
-gear_motor_height = 8;
-gear_motor_neck_height = 10;
-gear_motor_neck_diameter = 18;
+gear_motor_neck_height = 48;
+gear_motor_neck_diameter = 13;
 gear_motor_thickness = 608zz_thickness * 2; // "*2" due to herringbone!
 gear_motor_shaft_diameter = 5.5;
 
