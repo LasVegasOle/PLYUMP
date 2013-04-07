@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: motor_gear.scad                              */
 /* author: Luis Rodriguez                             */
-/* version: 0.4                                       */
+/* version: 0.41                                      */
 /* w3b: http://lyulyulyulyu.tumblr.com                */
 /* info:                                              */
 /******************************************************/
@@ -58,9 +58,9 @@ module gear_motor_shaft(){
 
 module gear_motor_screw_holder(){
 		// Screw hole
-		translate([0, gear_motor_thickness/2, gear_motor_neck_height ] ) {
+		translate([0, gear_motor_thickness/2, gear_motor_thickness/2 + gear_motor_neck_height/2 ] ) {
 			rotate([90, 0, 0]) {
-				cylinder( r = 3.2 / 2,  
+				#cylinder( r = 3.2 / 2,  
 					h =  gear_motor_neck_diameter/2 + gear_motor_shaft_diameter , $fn = birthday_day,
 					center=true);
 			}	

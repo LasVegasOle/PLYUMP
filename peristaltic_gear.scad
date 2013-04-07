@@ -2,7 +2,7 @@
 /* PLYUMP                                             */
 /* file: peristaltic_gear.scad                        */
 /* author: Luis Rodriguez                             */
-/* version: 0.4                                       */
+/* version: 0.41                                      */
 /* w3b: http://lyulyulyulyu.tumblr.com                */
 /* info:                                              */
 /******************************************************/
@@ -61,7 +61,7 @@ module central_bearings(){
 
 module central_shaft(){
 	translate([0, 0, gear_peristaltic_thickness/2 - 608zz_thickness]) 
-		#cylinder(r=608zz_inside_diameter/2 + bearings_clearance, h=608zz_thickness*10, $fn = birthday_day, center=true);
+		#cylinder(r=608zz_inside_diameter/2 + bearings_clearance, h=608zz_thickness*10, $fn = birthday_day, center=true);		
 }
 
 module rollers_shafts(){

@@ -19,6 +19,7 @@ module rollers_holder(){
 	difference(){
 		union(){ // Add
 			body();
+			central_bearing_wall();
 		}
 		union(){ // Substract
 			central_bearing_support();
@@ -29,7 +30,7 @@ module rollers_holder(){
 }
 
 module body(){
-	cylinder(r=rollers_position_radius + rollers_radius/2, h=rollers_holder_thickness + 608zz_thickness, center=true);
+	cylinder(r=rollers_position_radius + rollers_radius/2, h=rollers_holder_thickness, center=true);
 }
 
 module central_shaft(){
@@ -37,6 +38,11 @@ module central_shaft(){
 }
 
 module central_bearing_support(){
-	translate([0, 0, rollers_holder_thickness/2])
+	translate([0, 0, 608zz_thickness/2 ])
 		#cylinder(r=608zz_outside_diameter/2 + bearings_clearance/2, h=608zz_thickness, center=true);
+}
+
+module central_bearing_wall(){
+	translate([0, 0, 608zz_thickness/4 ])
+		#cylinder(r=608zz_outside_diameter/2 + bearings_clearance/2 + rollers_holder_central_bearing_wall_thickness, h=608zz_thickness/2, center=true);	
 }
