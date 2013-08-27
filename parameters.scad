@@ -7,7 +7,7 @@
 /* info: This file contains all the shared parameters */
 /******************************************************/
 
-birthday_day = 26;
+birthday_day = 26; // used for cylinders $fn
 
 /* Bearings dimensions (mm) */
 bearings_clearance = 0.5; 	// Used to "easily fit bearings into their holes"
